@@ -31,6 +31,9 @@ def done():
 def scriptbotlink():
     webbrowser.open('https://script-bot.netlify.com')
 
+def githublink():
+    webbrowser.open('https://github.com/no7macs/Open_Clicker')
+
 #loads settings file
 method = IntVar()
 delayinputtype = IntVar()
@@ -66,6 +69,12 @@ scriptbot = Button(root,justify = LEFT, command = scriptbotlink )
 scriptbotphoto=PhotoImage(file="../../logo.png")
 scriptbot.config(image=scriptbotphoto)
 scriptbot.pack(anchor=E)
+
+#git link button
+github = Button(root,justify = LEFT, command = githublink )
+githubphoto=PhotoImage(file="../../github.png")
+github.config(image=githubphoto)
+github.pack(anchor=E)
 
 root.after(1000, scanning)
 root.mainloop()
