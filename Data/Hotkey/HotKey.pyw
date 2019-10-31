@@ -1,23 +1,23 @@
 #!/bin/pyton3
-import pyautogui, sys
+import pyautogui, sys, os, time, keyboard, gc 
 from tkinter import *
 import tkinter
 from PIL import ImageTk, Image
-import keyboard
-import os
-import time
 
 root = Tk()
 root.title("Open Clicker Hotkey Settings")
 root.geometry("500x350")
 root.resizable(0,0)
-root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='../../favicon.png'))
+root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='../../Images/favicon.png'))
 
 def save():
     hotkeyfile = open("../Hotkey.txt", "w")
-    hotkeyfile.write(Startentry.get()+','+Stopentry.get()+','+Reloadentry.get())
-    sys.exit()
+    hotkeyfile.write(Startentry.get()+','+Stopentry.get())
+    done()
 def done():
+    os.chdir('../../../')
+    os.startfile('Open_Clicker.exe')
+    os.chdir('./Data/Hotkey/Hotkey')
     sys.exit()
     
 #Create Gui
@@ -32,12 +32,6 @@ Stoplabel.pack(anchor = CENTER)
 
 Stopentry = Entry(root, bd = 5)
 Stopentry.pack(anchor = CENTER)
-
-Reloadlabel = Label(root, text = "Reload Program")
-Reloadlabel.pack(anchor = CENTER)
-
-Reloadentry = Entry(root, bd = 5)
-Reloadentry.pack(anchor = CENTER)
 
 Done = Button(root, text = "Done", command = save)
 Done.pack(anchor = CENTER)
@@ -57,7 +51,7 @@ with open(filename) as f:
         hotkeys.append([str(n) for n in line.strip().split(',')])
 for pair in hotkeys:
     try:
-        startpresettext,stoppresettext,reloadpresettext = pair[0],pair[1],pair[2]
+        startpresettext,stoppresettext = pair[0],pair[1]
     except IndexError:
         print ("ERROR")
 
@@ -66,9 +60,6 @@ Startentry.insert(0,startpresettext)
 
 Stopentry .delete(0,END)
 Stopentry .insert(0,stoppresettext)
-
-Reloadentry .delete(0,END)
-Reloadentry .insert(0,reloadpresettext)
 
 root.mainloop()
 

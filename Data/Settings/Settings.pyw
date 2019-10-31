@@ -1,13 +1,12 @@
-import pyautogui, sys, time, keyboard, subprocess, csv, os
+import pyautogui, sys, time, keyboard, subprocess, csv, os, gc, webbrowser
 from tkinter import *
 import tkinter
-import gc, webbrowser
 
 root = Tk()
 root.title("Settings")
 root.geometry("500x250")
 root.resizable(0,0)
-root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='../../favicon.png'))
+root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='../../Images/favicon.png'))
 
 methodframe = Frame(root)
 methodframe.pack(side = LEFT)
@@ -22,10 +21,13 @@ def save():
     delayinputtypesave = (str(delayinputval.get()))
     settingsfile = open("../Settings.txt", "w")
     settingsfile.write((delayinputtypesave))
-    gc.collect()
-    sys.exit()
+    done()
 def done():
-    gc.collect()
+    os.chdir('../../../')
+    os.startfile('Open_clicker.exe')
+    os.chdir('../../../')
+    os.startfile('Open_Clicker.exe')
+    os.chdir('./Data/Settings/Settings')
     sys.exit()
 
 def scriptbotlink():
@@ -56,7 +58,7 @@ delayinputlabel.pack(anchor = W)
 delayinputmethod1 = Radiobutton(methodframe, text = "Slide Bar", variable=delayinputval, value=1)
 delayinputmethod1.pack(anchor = W)
 delayinputmethod2 = Radiobutton(methodframe, text = "Input Boxes", variable=delayinputval, value=2)
-delayinputmethod2.pack(anchor = W)
+delayinputmethod2.pack(anchor = W) 
 
 #creates done and cancel buttons
 Done = Button(donecancel, text = "Done", command = save)
@@ -66,13 +68,13 @@ Cancel.pack(anchor = CENTER)
 
 #Site Link Button
 scriptbot = Button(root,justify = LEFT, command = scriptbotlink )
-scriptbotphoto=PhotoImage(file="../../logo.png")
+scriptbotphoto=PhotoImage(file="../../Images/logo.png")
 scriptbot.config(image=scriptbotphoto)
 scriptbot.pack(anchor=E)
 
 #git link button
 github = Button(root,justify = LEFT, command = githublink )
-githubphoto=PhotoImage(file="../../github.png")
+githubphoto=PhotoImage(file="../../Images/github.png")
 github.config(image=githubphoto)
 github.pack(anchor=E)
 
