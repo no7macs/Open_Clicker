@@ -1,4 +1,4 @@
-import pyautogui, sys, time, keyboard, subprocess, csv, os, gc, webbrowser
+import pyautogui, sys, time, keyboard, subprocess, csv, os, gc, webbrowser, shutil
 from tkinter import *
 import tkinter
 
@@ -25,8 +25,6 @@ def save():
 def done():
     os.chdir('../../../')
     os.startfile('Open_clicker.exe')
-    os.chdir('../../../')
-    os.startfile('Open_Clicker.exe')
     os.chdir('./Data/Settings/Settings')
     sys.exit()
 
@@ -35,6 +33,14 @@ def scriptbotlink():
 
 def githublink():
     webbrowser.open('https://github.com/no7macs/Open_Clicker')
+
+def cleartmp():
+    os.chdir("../../")
+    shutil.rmtree("./tmp", ignore_errors=False, onerror=None)
+    time.sleep(2)
+    os.makedirs("./tmp")
+    done()
+    
 
 #loads settings file
 method = IntVar()
@@ -77,6 +83,10 @@ github = Button(root,justify = LEFT, command = githublink )
 githubphoto=PhotoImage(file="../../Images/github.png")
 github.config(image=githubphoto)
 github.pack(anchor=E)
+
+#creates clear tmp file button
+clrtmpbtn = Button(root,justify = LEFT, text = "Clear tmp data",command = cleartmp )
+clrtmpbtn.pack(anchor=E)
 
 root.after(1000, scanning)
 root.mainloop()
