@@ -13,10 +13,6 @@ methodframe.pack(side = LEFT)
 donecancel = Frame(root)
 donecancel.pack(side = BOTTOM)
 
-def scanning():
-
-    root.after(1, scanning)
-
 def save():
     delayinputtypesave = (str(delayinputval.get()))
     settingsfile = open("../Settings.txt", "w")
@@ -28,19 +24,17 @@ def done():
     os.chdir('./Data/Settings/Settings')
     sys.exit()
 
+def cleartmp():
+    os.chdir('../Clear_tmp_data')
+    os.startfile('Clear_tmp_data.exe')
+    os.chdir('../Settings')
+    sys.exit()
+
 def scriptbotlink():
     webbrowser.open('https://script-bot.netlify.com')
 
 def githublink():
     webbrowser.open('https://github.com/no7macs/Open_Clicker')
-
-def cleartmp():
-    os.chdir("../../")
-    shutil.rmtree("./tmp", ignore_errors=False, onerror=None)
-    time.sleep(2)
-    os.makedirs("./tmp")
-    done()
-    
 
 #loads settings file
 method = IntVar()
@@ -88,5 +82,4 @@ github.pack(anchor=E)
 clrtmpbtn = Button(root,justify = LEFT, text = "Clear tmp data",command = cleartmp )
 clrtmpbtn.pack(anchor=E)
 
-root.after(1000, scanning)
 root.mainloop()

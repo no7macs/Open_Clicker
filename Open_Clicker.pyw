@@ -4,7 +4,6 @@ from tkinter import *
 import tkinter
 import win32api, win32con
 
-#Gravina's INFINITY
 root = Tk()
 root.title("Open Clicker")
 root.geometry("525x250")
