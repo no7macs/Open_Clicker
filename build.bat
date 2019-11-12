@@ -9,6 +9,7 @@ echo %mypath%
 timeout 2
 
 copy "%mypath%\Data\Images\" "%mypath%\build\program\Data\Images\"
+copy "%mypath%\Data\Register\" "%mypath%\build\program\Data\Register\"
 timeout 2
 
 pyinstaller --workpath ./build/working --distpath ./build/program/data/Hotkey --specpath ./build --ascii --noconfirm --clean ./Data/Hotkey/HotKey.pyw

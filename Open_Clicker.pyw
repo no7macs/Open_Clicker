@@ -1,8 +1,10 @@
 #!/bin/pyton3
-import pyautogui, sys, time, keyboard, subprocess, csv, os, mouse
+import pyautogui, sys, time, keyboard, subprocess, csv, os, mouse, gc
+import urllib.request as urllib
+import win32api, win32con
+from datetime import datetime
 from tkinter import *
 import tkinter
-import win32api, win32con
 
 root = Tk()
 root.title("Open Clicker")
@@ -154,5 +156,12 @@ for pair in hotkeys:
         print ("ERROR")
 f.close()
 
-root.after(1000, scanning)
+print(datetime.now())
+#Downloads Register Key File
+registerfile = urllib.urlopen('https://pastebin.com/raw/mG7sQysy')
+registerdatatowrite = registerfile.read()
+with open('./Data/Register/Key.txt', 'wb') as f:
+    f.write(registerdatatowrite)
+
+root.after(1, scanning)
 root.mainloop()
