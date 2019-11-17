@@ -1,5 +1,5 @@
 import pyautogui, sys, time, keyboard, subprocess, csv, os, gc, webbrowser, shutil
-from tkinter import *
+from tkinter import Tk, Frame, Label, Button, PhotoImage, LEFT, BOTTOM, Radiobutton, IntVar, W, E, CENTER 
 import tkinter
 
 root = Tk()

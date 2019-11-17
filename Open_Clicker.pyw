@@ -1,10 +1,10 @@
-#!/bin/pyton3
+#!/bin/python3
 import pyautogui, sys, time, keyboard, subprocess, csv, os, mouse, gc
 import urllib.request as urllib
 import win32api, win32con
 from datetime import datetime
-from tkinter import *
-import tkinter
+from time import gmtime, strftime
+from tkinter import Tk, Button, Label, Scale, Entry, Checkbutton, PhotoImage, Frame, LEFT, RIGHT, BOTTOM, HORIZONTAL, CENTER, IntVar, W, S
 
 root = Tk()
 root.title("Open Clicker")
@@ -156,12 +156,25 @@ for pair in hotkeys:
         print ("ERROR")
 f.close()
 
-print(datetime.now())
+#add in V3.0
+'''
 #Downloads Register Key File
 registerfile = urllib.urlopen('https://pastebin.com/raw/mG7sQysy')
 registerdatatowrite = registerfile.read()
 with open('./Data/Register/Key.txt', 'wb') as f:
     f.write(registerdatatowrite)
 
+filename = "./Data/Register/Time.txt"
+lastusedatefile = open(filename, 'r')
+lastusedate = lastusedatefile.read()
+curdate = strftime("%Y%m%d%H%M", gmtime())
+print(lastusedatefile.read())
+print(strftime("%Y%m%d%H%M", gmtime()))
+
+if (int(curdate) > int(lastusedate) + 1440):
+    print("okbuddyretard")   
+'''
+
+gc.collect()
 root.after(1, scanning)
 root.mainloop()

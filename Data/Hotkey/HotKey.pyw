@@ -1,7 +1,6 @@
 #!/bin/pyton3
 import pyautogui, sys, os, time, keyboard, gc 
-from tkinter import *
-import tkinter
+from tkinter import Tk, Label, Button, Entry, PhotoImage, CENTER, END
 from PIL import ImageTk, Image
 
 root = Tk()
