@@ -1,14 +1,13 @@
 #!/bin/python3
-import pyautogui, sys, time, keyboard, subprocess, csv, os, mouse, gc
-import urllib.request as urllib
+import sys, keyboard, csv, os, gc, time
 import win32api, win32con
-from datetime import datetime
-from time import gmtime, strftime
+from multiprocessing import Process
 from tkinter import Tk, Button, Label, Scale, Entry, Checkbutton, PhotoImage, Frame, LEFT, RIGHT, BOTTOM, HORIZONTAL, CENTER, IntVar, W, S
 
 root = Tk()
 root.title("Open Clicker")
 root.geometry("525x250")
+#root.geometry("262x125")
 root.resizable(0,0)
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='Data/Images/favicon.png'))
 
@@ -28,36 +27,6 @@ startstop = Frame(root)
 startstop.pack(side = BOTTOM)
 
 running = 'False'  # Global flag
-
-def scanning():
-    #checks to see if a hotkey is pressed
-    if keyboard.is_pressed(starthotkey):
-        startclicking()
-
-    elif keyboard.is_pressed(stophotkey):
-        stopclicking()
-
-    if running == 'True':  # Only do this if the Stop button has not been clicked
-        timeout = ((int(cpsval.get()))/int(1000))
-        print(timeout)
-
-        if buttonvar1.get() == 1:
-            x = int()
-            y = int()
-            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
-            time.sleep(timeout)
-            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
-        else: print("no LCB")
-                        
-        if buttonvar2.get() == 1:
-            x = int()
-            y = int()
-            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
-            time.sleep(timeout)
-            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
-        else: print("no RCB")
-
-    root.after(1, scanning)
 
 def stopclicking():
     global running
@@ -83,6 +52,36 @@ def opensettings():
     os.startfile("Settings.exe")
     os.chdir("../../../")
     sys.exit()
+
+def scanning():
+
+    if keyboard.is_pressed(starthotkey):
+        startclicking()
+
+    elif keyboard.is_pressed(stophotkey):
+        stopclicking()
+
+    if running == 'True':  # Only do this if the Stop button has not been clicked
+        timeout = ((int(cpsval.get()))/int(1000))
+        print(timeout)
+
+        if buttonvar1.get() == 1:
+            x = int()
+            y = int()
+            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
+            time.sleep(timeout)
+            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
+        else: print("no LCB")
+                        
+        if buttonvar2.get() == 1:
+            x = int()
+            y = int()
+            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
+            time.sleep(timeout)
+            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
+        else: print("no RCB")
+        root.after(1, scanning)
+    else: root.after(100, scanning)
 
 #loads settings file
 methoddata = []
@@ -156,25 +155,8 @@ for pair in hotkeys:
         print ("ERROR")
 f.close()
 
-#add in V3.0
-'''
-#Downloads Register Key File
-registerfile = urllib.urlopen('https://pastebin.com/raw/mG7sQysy')
-registerdatatowrite = registerfile.read()
-with open('./Data/Register/Key.txt', 'wb') as f:
-    f.write(registerdatatowrite)
-
-filename = "./Data/Register/Time.txt"
-lastusedatefile = open(filename, 'r')
-lastusedate = lastusedatefile.read()
-curdate = strftime("%Y%m%d%H%M", gmtime())
-print(lastusedatefile.read())
-print(strftime("%Y%m%d%H%M", gmtime()))
-
-if (int(curdate) > int(lastusedate) + 1440):
-    print("okbuddyretard")   
-'''
-
 gc.collect()
-root.after(1, scanning)
+
+root.after(1000, scanning)
 root.mainloop()
+

@@ -1,11 +1,11 @@
 #!/bin/pyton3
-import pyautogui, sys, os, time, keyboard, gc 
+import sys, os
 from tkinter import Tk, Label, Button, Entry, PhotoImage, CENTER, END
 from PIL import ImageTk, Image
 
 root = Tk()
 root.title("Open Clicker Hotkey Settings")
-root.geometry("500x350")
+#root.geometry("500x350")
 root.resizable(0,0)
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='../../Images/favicon.png'))
 

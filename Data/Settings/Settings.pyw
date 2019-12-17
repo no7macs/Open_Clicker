@@ -1,10 +1,10 @@
-import pyautogui, sys, time, keyboard, subprocess, csv, os, gc, webbrowser, shutil
+import sys, os, webbrowser
 from tkinter import Tk, Frame, Label, Button, PhotoImage, LEFT, BOTTOM, Radiobutton, IntVar, W, E, CENTER 
 import tkinter
 
 root = Tk()
 root.title("Settings")
-root.geometry("500x250")
+#root.geometry("500x250")
 root.resizable(0,0)
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='../../Images/favicon.png'))
 

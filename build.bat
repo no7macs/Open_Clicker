@@ -9,6 +9,7 @@ echo %mypath%
 timeout 2
 
 copy "%mypath%\Data\Images\" "%mypath%\build\program\Data\Images\"
+copy "%mypath%\Data\Hotkey\Hotkey.txt" "%mypath%\build\program\Data\Hotkey" 
 
 timeout 2
 

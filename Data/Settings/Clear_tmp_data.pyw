@@ -1,4 +1,7 @@
-import time, os, sys, shutil
+import time, sys, shutil
+from sys import sys.exit
+from shutil import shutil.rmtree
+from os import os.startfile, os.chdir
 from tkinter import *
 import tkinter
 
@@ -23,7 +26,7 @@ def main():
     root.after(1, main)
 def end():
     os.chdir('./Settings')
-    os.stertfile('Settings.exe')
+    os.startfile('Settings.exe')
     sys.exit()
     
 def start():
