@@ -26,16 +26,24 @@ settingsframe.pack(side = BOTTOM)
 startstop = Frame(root)
 startstop.pack(side = BOTTOM)
 
-running = 'False'  # Global flag
+running = False  # Global flag
 
 def stopclicking():
     global running
-    running = 'False'
+    running = False
     label.config(text = "Currently:OFF")
+    timeout = ((int(cpsval.get()))/int(1000))
+    print(timeout)
+    scanning()
+
 def startclicking():
     global running
-    running = 'True'
+    global timeout
+    running = True
     label.config(text = "Currently:ON")
+    timeout = ((int(cpsval.get()))/int(1000))
+    print(timeout)
+    scanning()
 
 def hotkeysettings():
     path = "./Data/Hotkey/Hotkey/" 
@@ -45,26 +53,18 @@ def hotkeysettings():
     sys.exit()
 
 def opensettings():
-    global changesettingsydir
     path = "./Data/Settings/Settings/"
     os.chdir(path)
-    changesettingsydir = 'True'
     os.startfile("Settings.exe")
     os.chdir("../../../")
     sys.exit()
 
 def scanning():
+    if keyboard.is_pressed(starthotkey): startclicking()
 
-    if keyboard.is_pressed(starthotkey):
-        startclicking()
+    elif keyboard.is_pressed(stophotkey): stopclicking()
 
-    elif keyboard.is_pressed(stophotkey):
-        stopclicking()
-
-    if running == 'True':  # Only do this if the Stop button has not been clicked
-        timeout = ((int(cpsval.get()))/int(1000))
-        print(timeout)
-
+    if running == True:  # Only do this if the Stop button has not been clicked
         if buttonvar1.get() == 1:
             x = int()
             y = int()
@@ -154,6 +154,20 @@ for pair in hotkeys:
     except IndexError:
         print ("ERROR")
 f.close()
+
+'''
+filename = "./Data/if_launch.txt"
+if_launch = []
+with open(filename) as f:
+    for line in f:
+        if_launch.append([str(n) for n in line.strip().split(',')])
+for pair in if_launch:
+    try:
+        if_launchval = pair[0]
+    except IndexError:
+        print ("ERROR")
+f.close()
+'''
 
 gc.collect()
 
