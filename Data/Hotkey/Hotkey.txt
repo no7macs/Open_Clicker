@@ -1,1 +1,0 @@
-shift+q,shift+w
