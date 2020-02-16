@@ -18,7 +18,7 @@ timeout 2
 REM pyinstaller --workpath ./build/working --distpath ./build/program/data --specpath ./build --noconfirm --clean ./HotKey.pyw
 timeout 2
 
-pyinstaller --workpath ./build/working --distpath ./build/program/data/Settings --specpath ./build --noconfirm --clean ./Data/Settings/Settings/Settings.pyw
+REM pyinstaller --workpath ./build/working --distpath ./build/program/data/Settings --specpath ./build --noconfirm --clean ./Data/Settings/Settings/Settings.pyw
 timeout 2 
 
 REM pyinstaller --workpath ./build/working --distpath ./build/program/data/Settings --specpath ./build --runtime-tmpdir ./Data/tmp --noconfirm --clean ./Data/Settings/Settings/Clear_tmp_data/Clear_tmp_data.pyw

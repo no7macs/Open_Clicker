@@ -4,8 +4,7 @@ import win32api, win32con
 from multiprocessing import Process
 from tkinter import Tk, Button, Label, Scale, Entry, Checkbutton, PhotoImage, Frame, LEFT, RIGHT, BOTTOM, HORIZONTAL, CENTER, IntVar, W, S
 import HotKey
-import Settings
-
+import About
 def stopclicking():
     global running
     running = False
@@ -32,14 +31,14 @@ def hotkeysettings(starthotkey, stophotkey):
     root.destroy()
     HotKey.main(starthotkey, stophotkey)
 
-def opensettings():
+def openabout():
     #path = "./Data/Settings/Settings/"
     #os.chdir(path)
     #os.startfile("Settings.exe")
     #os.chdir("../../../")
     #sys.exit()
     root.destroy()
-    Settings.main()
+    About.main()
     
 def scanning():
     if keyboard.is_pressed(starthotkey): startclicking()
@@ -93,30 +92,12 @@ def main():
 
     running = False  # Global flag
 
-    #loads settings file
-    methoddata = []
-    delaybartype = []
-    filename = "./Settings.txt"
-    with open(filename) as f:
-        for line in f:
-            methoddata.append([str(n) for n in line.strip().split(',')])
-    for pair in  methoddata:
-        try:
-            delaybartype = pair[0]
-        except IndexError:
-            print ("ERROR")
-
     cpsval = IntVar()
     cpslabel = Label(simpleclick, text='Click interval')
     cpslabel.pack(anchor=W)
-    if delaybartype == '1':
-        cpsscale = Scale(simpleclick, from_=1, to=1000, var=cpsval, orient=HORIZONTAL, length = 125)
-        cpsscale.pack(anchor=W)
-    elif delaybartype == '2':
-        cpsinput = Entry(simpleclick, bd = 5, width = 15)
-        cpsinput.pack(anchor=W)
 
-    else: print("ERROR")
+    cpsscale = Scale(simpleclick, from_=1, to=1000, var=cpsval, orient=HORIZONTAL, length = 125)
+    cpsscale.pack(anchor=W)
 
     buttonvar1 = IntVar()
     buttonvar2 = IntVar()
@@ -137,7 +118,7 @@ def main():
     #settings and info
     hotkey = Button(settingsframe, text = "Hotkey", justify = LEFT, command = lambda: hotkeysettings(starthotkey, stophotkey))
     hotkey.pack(side=LEFT)
-    settingsbutton = Button(settingsframe, text = "Settings", justify = LEFT, command = opensettings)
+    settingsbutton = Button(settingsframe, text = "About", justify = LEFT, command = openabout)
     settingsbutton.pack(side=LEFT)
 
     label = Label(info, text = "Currently:OFF")
