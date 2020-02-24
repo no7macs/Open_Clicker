@@ -24,7 +24,7 @@ def main(startpresettext, stoppresettext):
 
     root = Tk()
     root.title("Open Clicker Hotkey Settings")
-    root.geometry("500x350")
+    #root.geometry("500x350")
     #root.geometry("300x200")
     root.resizable(0,0)
     #root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='./favicon.png'))

@@ -24,7 +24,9 @@ timeout 2
 REM pyinstaller --workpath ./build/working --distpath ./build/program/data/Settings --specpath ./build --runtime-tmpdir ./Data/tmp --noconfirm --clean ./Data/Settings/Settings/Clear_tmp_data/Clear_tmp_data.pyw
 timeout 2
 
-pyinstaller --workpath ./build/working --distpath ./build/program --specpath ./build --noconfirm --clean --onefile ./Data/main/Open_Clicker.pyw
+rem pyinstaller --workpath ./build/working --distpath ./build/program --specpath ./build --noconfirm --clean --onefile ./Data/main/Open_Clicker.pyw
 timeout 2
+
+pyinstaller --workpath ./build/working --distpath ./build/program --specpath ./build --noconfirm --clean --onefile ./Updater.pyw
 
 timeout 10
