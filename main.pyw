@@ -1,7 +1,7 @@
 from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage
 import keyboard, time, webbrowser
 import win32api, win32con
-#from win10toast import ToastNotifier
+from win10toast import ToastNotifier
 running = int(0)
 
 def main(running):
@@ -10,24 +10,30 @@ def main(running):
     if starthotkeyentry.get() != '':
         if keyboard.is_pressed(starthotkeyentry.get()): 
             running = int(1)
+            time.sleep(1)
             #toaster.show_toast('Open_Clicker','Started', duration = 2, icon_path='./favicon.ico')
     if stophotkeyentry.get() != '': 
         if keyboard.is_pressed(stophotkeyentry.get()): 
             running = int(2)
+            time.sleep(1)
             #toaster.show_toast('Open_Clicker','Stopped', duration = 2, icon_path='./favicon.ico')
     
-    print(running)
-    #print(lcbbuttonvar.get())
     if running == 1:
         if lcbbuttonvar.get() == 1:
             win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
             time.sleep(cpsvalue.get()/1000)
             win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
 
+        if mcbbuttonvar.get() == 1:
+            win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
+            time.sleep(cpsvalue.get()/1000)
+            win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
+
         if rcbbuttonvar.get() == 1:
             win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
             time.sleep(cpsvalue.get()/1000)
             win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
+
         root.after(1,lambda: main(running))
         
     else: root.after(100,lambda: main(running))
@@ -72,14 +78,17 @@ cpsframe = Frame(root, bg = '#0F151D')
 cpsframe.pack(side = TOP)
 otherstuffframe = Frame(root, bg = '#0F151D')
 otherstuffframe.pack(anchor = CENTER)
-
 cdbuttonframe = Frame(otherstuffframe, bg = '#0F151D')
 cdbuttonframe.pack(side = LEFT)
-startandstopframe = Frame(otherstuffframe, bg = '#0F151D')
+#Hotkey frames
+classichotkeyframe = Frame(otherstuffframe, bg = '#0F151D')
+classichotkeyframe.pack(anchor = W)
+
+startandstopframe = Frame(classichotkeyframe, bg = '#0F151D')
 startandstopframe.pack(side = LEFT)
-hotkeyframe = Frame(otherstuffframe, bg = '#0F151D')
+hotkeyframe = Frame(classichotkeyframe, bg = '#0F151D')
 hotkeyframe.pack(side = LEFT)
-setandresethotkeyframe = Frame(otherstuffframe, bg = '#0F151D')
+setandresethotkeyframe = Frame(classichotkeyframe, bg = '#0F151D')
 setandresethotkeyframe.pack(side = LEFT)
 
 cpsvalue = IntVar()
@@ -89,12 +98,16 @@ cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = 1, to = 1000, resolutio
 cpsslider.pack(side = TOP)
 
 lcbbuttonvar = IntVar()
+mcbbuttonvar = IntVar()
 rcbbuttonvar = IntVar()
 lcbcheckbox = Checkbutton(cdbuttonframe, text = 'LCB Button',variable = lcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
 lcbcheckbox.pack(anchor = W)
+mcbcheckbox = Checkbutton(cdbuttonframe, text = 'MCB Button',variable = mcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
+mcbcheckbox.pack(anchor = W)
 rcbcheckbox = Checkbutton(cdbuttonframe, text = 'RCB Button',variable = rcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
 rcbcheckbox.pack(anchor = W)
 lcbbuttonvar.set(1)
+mcbbuttonvar.set(0)
 rcbbuttonvar.set(0)
 
 startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(running), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
@@ -137,10 +150,10 @@ scriptbotphoto=PhotoImage(file="logo.png")
 scriptbotlogo.config(image=scriptbotphoto)
 scriptbotlogo.pack(anchor=E)
 
-version = Label(root, text = 'Version 3.0', bg = '#0F151D', fg = '#C96C00')
+version = Label(root, text = 'Version 3.1', bg = '#0F151D', fg = '#C96C00')
 version.pack(anchor = E)
 
-#toaster = ToastNotifier()
+toaster = ToastNotifier()
 
 root.after(1000,lambda: main(running))
 root.mainloop()
