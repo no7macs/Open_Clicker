@@ -1,17 +1,16 @@
-#from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage
-from tkinter import *
+from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage
+#from tkinter import *
 import webbrowser, keyboard
 import win32api, win32con
-#import changecpslimits
-#from win32api import mouse_event
-#from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP
+#from win32api import mouse_event, Sleep, keybd_event as win32api
+#from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
 #from win10toast import ToastNotifier
 running = int(0)
 
 def main(running):
 
     if lcbhotkey.get() != '':
-        #if win32api.GetAsyncKeyState(ord(str(lcbhotkey.get()))) != 0: togglelcb()
+        #if keyboard.is_pressed(lcbhotkey.get()): togglelcb()
         if keyboard.is_pressed(lcbhotkey.get()): togglelcb()
     if mcbhotkey.get() != '':
         #if win32api.GetAsyncKeyState(ord(str(mcbhotkey.get()))) != 0: togglemcb()
@@ -32,22 +31,28 @@ def main(running):
             running = int(2)
             win32api.Sleep(1000)
             #toaster.show_toast('Open_Clicker','Stopped', duration = 2, icon_path='./favicon.ico')
-    
+
     if running == 1:
-        if lcbbuttonvar.get() == 1:
-            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
-            win32api.Sleep(int(cpsvalue.get()))
-            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
+        if morkcheckbuttonvar.get() == 1:
+            if lcbbuttonvar.get() == 1:
+                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
+                win32api.Sleep(int(cpsvalue.get()))
+                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
 
-        if mcbbuttonvar.get() == 1:
-            win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
-            win32api.Sleep(int(cpsvalue.get()))
-            win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
+            if mcbbuttonvar.get() == 1:
+                win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
+                win32api.Sleep(int(cpsvalue.get()))
+                win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
 
-        if rcbbuttonvar.get() == 1:
-            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
-            win32api.Sleep(int(cpsvalue.get()))
-            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
+            if rcbbuttonvar.get() == 1:
+                win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
+                win32api.Sleep(int(cpsvalue.get()))
+                win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
+        if morkcheckbuttonvar.get() == 0:
+            for a in range(len(keyboardentry.get().split(','))):
+                win32api.keybd_event(ord(keyboardentry.get().split(',')[a]),0)
+                win32api.Sleep(int(cpsvalue.get()))
+                print(keyboardentry.get().split(',')[a])
 
         root.after(1,lambda: main(running))
         
@@ -67,12 +72,35 @@ def Stop(running):
 
 def sethotkey():
     hotkeyfile = open('./Settings.txt','w')
-    hotkeyfile.write(starthotkeyentry.get() + '|' + stophotkeyentry.get() + '|' + lcbhotkey.get() + '|' + mcbhotkey.get() + '|' + rcbhotkey.get() + '|'+ settingslines[0].split('|')[5] + '|' + settingslines[0].split('|')[6])
+    hotkeyfile.write(starthotkeyentry.get() + '|' + stophotkeyentry.get() + '|' + lcbhotkey.get() + '|' + mcbhotkey.get() + '|' + rcbhotkey.get() + '|' + str(morkcheckbuttonvar.get()) + '|' + str(cpsvalue.get()) + '|' + str(lcbbuttonvar.get()) + '|' + str(mcbbuttonvar.get()) + '|' + str(rcbbuttonvar.get()) + '|' + str(keyboardentry.get()) + '|' + settingslines[0].split('|')[11] + '|' + settingslines[0].split('|')[12])
+    hotkeyfile.close()
+    root.destroy()
+    import main
+
+def restoredefault():
+    hotkeyfile = open('./Settings.txt','w')
+    hotkeyfile.write(str('|||||1|0|1|0|0||1|1000'))
     hotkeyfile.close()
     root.destroy()
     import main
 
 def resethotkey(): 
+
+    lcblabel.config(state='normal')
+    mcblabel.config(state='normal')
+    rcblabel.config(state='normal')
+    lcbcheckbox.config(state='normal')
+    mcbcheckbox.config(state='normal')
+    rcbcheckbox.config(state='normal')
+    lcbhotkeylabel.config(state='normal')
+    mcbhotkeylabel.config(state='normal')
+    rcbhotkeylabel.config(state='normal')
+    lcbhotkey.config(state='normal')
+    mcbhotkey.config(state='normal')
+    rcbhotkey.config(state='normal')
+    keyboardlabel.config(state='normal')
+    keyboardentry.config(state='normal')
+
     starthotkeyentry.delete(0,END)
     starthotkeyentry.insert(0,originstarthotkey)
 
@@ -80,13 +108,18 @@ def resethotkey():
     stophotkeyentry.insert(0,originstophotkey)
 
     lcbhotkey.delete(0,END)
-    lcbhotkey.insert(0,originstophotkey)
+    lcbhotkey.insert(0,originlcbhotkey)
 
     mcbhotkey.delete(0,END)
-    mcbhotkey.insert(0,originstophotkey)
+    mcbhotkey.insert(0,originmcbhotkey)
 
     rcbhotkey.delete(0,END)
-    rcbhotkey.insert(0,originstophotkey)
+    rcbhotkey.insert(0,originrcbhotkey)
+
+    keyboardentry.delete(0,END)
+    keyboardentry.insert(0,originkeyboardentry)
+
+    changeclickmode()
 
 def scriptbotlink():
     webbrowser.open('https://script-bot.netlify.com')
@@ -108,6 +141,41 @@ def changecpslimits():
     #changecpslimits.main()
     import changecpslimits
 
+def changeclickmode():
+    if morkcheckbuttonvar.get() == 0:
+        lcblabel.config(state='disabled')
+        mcblabel.config(state='disabled')
+        rcblabel.config(state='disabled')
+        lcbcheckbox.config(state='disabled')
+        mcbcheckbox.config(state='disabled')
+        rcbcheckbox.config(state='disabled')
+        lcbhotkeylabel.config(state='disabled')
+        mcbhotkeylabel.config(state='disabled')
+        rcbhotkeylabel.config(state='disabled')
+        lcbhotkey.config(state='disabled')
+        mcbhotkey.config(state='disabled')
+        rcbhotkey.config(state='disabled')
+        keyboardlabel.config(state='normal')
+        keyboardentry.config(state='normal')
+    elif morkcheckbuttonvar.get() == 1:
+        lcblabel.config(state='normal')
+        mcblabel.config(state='normal')
+        rcblabel.config(state='normal')
+        lcbcheckbox.config(state='normal')
+        mcbcheckbox.config(state='normal')
+        rcbcheckbox.config(state='normal')
+        lcbhotkeylabel.config(state='normal')
+        mcbhotkeylabel.config(state='normal')
+        rcbhotkeylabel.config(state='normal')
+        lcbhotkey.config(state='normal')
+        mcbhotkey.config(state='normal')
+        rcbhotkey.config(state='normal')
+        keyboardlabel.config(state='disabled')
+        keyboardentry.config(state='disabled')
+    else: print('YOU FUCKED IT UP YOU DUMBASS')
+
+    return
+
 #beutiful gui
 root = Tk()
 root.title('Open_Clicker 3')
@@ -115,10 +183,13 @@ root.config(bg = '#0F151D')
 root.resizable(0,0)
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='./favicon.png'))
 
+#Frame for the cps slider and button to change it's limits
 cpsframe = Frame(root, bg = '#0F151D')
 cpsframe.pack(side = TOP)
+#yes lets put the start and stop stuff in a frame titled other stuff
 otherstuffframe = Frame(root, bg = '#0F151D')
 otherstuffframe.pack(side = TOP)
+#The frame the button and keyboard button selection stuff goes in.
 cbbuttonframe = Frame(root, bg = '#0F151D')
 cbbuttonframe.pack(side = TOP)
 
@@ -131,6 +202,8 @@ hotkeyframe = Frame(classichotkeyframe, bg = '#0F151D')
 hotkeyframe.pack(side = LEFT)
 setandresethotkeyframe = Frame(classichotkeyframe, bg = '#0F151D')
 setandresethotkeyframe.pack(side = LEFT)
+restoredefaultframe = Frame(classichotkeyframe, bg = '#0F151D')
+restoredefaultframe.pack(side = LEFT)
 
 settingsfile = open('./Settings.txt','r')
 settingslines = settingsfile.readlines()
@@ -138,10 +211,11 @@ settingslines = settingsfile.readlines()
 cpsvalue = IntVar()
 cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
 cpsvaluelabel.pack(side = TOP)
-cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(settingslines[0].split('|')[5]), to = int(settingslines[0].split('|')[6]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
+cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(settingslines[0].split('|')[11]), to = int(settingslines[0].split('|')[12]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
 cpsslider.pack(side = LEFT)
 changecpssliderlimits = Button(cpsframe, text = 'Change cps slider limits', command = lambda: changecpslimits(), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
 changecpssliderlimits.pack(side = LEFT)
+cpsslider.set(int(settingslines[0].split('|')[6]))
 
 startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(running), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
 startbutton.pack(anchor = W)
@@ -167,6 +241,9 @@ sethotkeybutton.pack(anchor = W)
 Resethotkey = Button(setandresethotkeyframe, text = 'Reset HotKey', command = resethotkey, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
 Resethotkey.pack(anchor = W)
 
+retoredefaultbutton = Button(restoredefaultframe, text = 'Reset Default', command = restoredefault, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+retoredefaultbutton.pack(anchor = W)
+
 originstarthotkey = settingslines[0].split('|')[0].upper()
 starthotkeyentry.delete(0,END)
 starthotkeyentry.insert(0,originstarthotkey)
@@ -174,16 +251,42 @@ originstophotkey = settingslines[0].split('|')[1].upper()
 stophotkeyentry.delete(0,END)
 stophotkeyentry.insert(0,originstophotkey)
 
-#button Hotkey frames
-buttonlabelframe = Frame(cbbuttonframe, bg = '#0F151D')
+#thing for containing all the hotkey buttons and other neat stuff for keyboard
+
+#The overarchinge frame
+mouseandkeyboardsettingframe = Frame(cbbuttonframe, bg = '#0F151D')
+mouseandkeyboardsettingframe.pack(side = LEFT)
+#The 2 frames for the settings and selecting mouse or keyboard
+selectkeyboardormouseframe = Frame(mouseandkeyboardsettingframe, bg = '#0F151D')
+selectkeyboardormouseframe.pack(side = LEFT)
+mandksettingsframe = Frame(mouseandkeyboardsettingframe, bg = '#0F151D')
+mandksettingsframe.pack(side = LEFT)
+#The 2 frames for the mouse and keyboard settings
+mousesettingstuff = Frame(mandksettingsframe, bg = '#0F151D')
+mousesettingstuff.pack(anchor = W)
+keyboardstuff = Frame(mandksettingsframe, bg = '#0F151D')
+keyboardstuff.pack(anchor = W)
+
+#The things for changing between mouse and keyboard
+morkcheckbuttonvar = IntVar()
+mousecheckbutton = Checkbutton(selectkeyboardormouseframe, pady = 15,text = 'mouse', variable = morkcheckbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F', command = lambda: changeclickmode())
+mousecheckbutton.pack(anchor = W)
+keyboardcheckbutton = Checkbutton(selectkeyboardormouseframe, pady = 15, text = 'keyboard', variable = morkcheckbuttonvar, onvalue = 0, offvalue = 1, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F', command = lambda: changeclickmode())
+keyboardcheckbutton.pack(anchor = W)
+morkcheckbuttonvar.set(settingslines[0].split('|')[5])
+
+#mouse button stuff
+#mouse button setting frames
+buttonlabelframe = Frame(mousesettingstuff, bg = '#0F151D')
 buttonlabelframe.pack(side = LEFT)
-buttoncheckboxframe = Frame(cbbuttonframe, bg = '#0F151D')
+buttoncheckboxframe = Frame(mousesettingstuff, bg = '#0F151D')
 buttoncheckboxframe.pack(side = LEFT)
-buttonhotkeylabel = Frame(cbbuttonframe, bg = '#0F151D')
+buttonhotkeylabel = Frame(mousesettingstuff, bg = '#0F151D')
 buttonhotkeylabel.pack(side = LEFT)
-buttonhotkeyframe = Frame(cbbuttonframe, bg = '#0F151D')
+buttonhotkeyframe = Frame(mousesettingstuff, bg = '#0F151D')
 buttonhotkeyframe.pack(side = LEFT)
 
+#Mouse button stuff
 lcblabel = Label(buttonlabelframe, text = 'LCB Button  ', bg = '#0F151D', fg = '#C96C00')
 lcblabel.pack(anchor = W)
 mcblabel = Label(buttonlabelframe, text = 'MCB Button', bg = '#0F151D', fg = '#C96C00')
@@ -200,9 +303,9 @@ mcbcheckbox = Checkbutton(buttoncheckboxframe, variable = mcbbuttonvar, onvalue 
 mcbcheckbox.pack(anchor = W)
 rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
 rcbcheckbox.pack(anchor = W)
-lcbbuttonvar.set(1)
-mcbbuttonvar.set(0)
-rcbbuttonvar.set(0)
+lcbbuttonvar.set(settingslines[0].split('|')[7])
+mcbbuttonvar.set(settingslines[0].split('|')[8])
+rcbbuttonvar.set(settingslines[0].split('|')[9])
 
 lcbhotkeylabel = Label(buttonhotkeylabel, text = 'LCB Hotkey  ', bg = '#0F151D', fg = '#C96C00')
 lcbhotkeylabel.pack(anchor = W)
@@ -228,17 +331,29 @@ originrcbhotkey = settingslines[0].split('|')[4].upper()
 rcbhotkey.delete(0,END)
 rcbhotkey.insert(0,originrcbhotkey)
 
+#Keyboard button stuff
+#keyboard setting frames
+keyboardlabel = Label(keyboardstuff, text = 'Keboard keys:', bg = '#0F151D', fg = '#C96C00')
+keyboardlabel.pack(side = LEFT)
+keyboardentry = Entry(keyboardstuff, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
+keyboardentry.pack(side = LEFT)
+originkeyboardentry = settingslines[0].split('|')[10].upper()
+keyboardentry.delete(0,END)
+keyboardentry.insert(0,originkeyboardentry)
 
+#keyboard stuff
 #Version and link to de neat website
 scriptbotlogo = Button(root,justify = LEFT, command = scriptbotlink, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
 scriptbotphoto=PhotoImage(file="logo.png")
 scriptbotlogo.config(image=scriptbotphoto)
 scriptbotlogo.pack(anchor = E)
 
-version = Label(root, text = 'Version 3.1', bg = '#0F151D', fg = '#C96C00')
+version = Label(root, text = 'Version 4.0 PRODUCTION', bg = '#0F151D', fg = '#C96C00')
 version.pack(anchor = E)
 
 #toaster = ToastNotifier()
+
+changeclickmode()
 
 root.after(1000,lambda: main(running))
 root.mainloop()
