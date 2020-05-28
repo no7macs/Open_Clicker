@@ -12,7 +12,7 @@ def save(root, minvalueentry, maxvalueentry, hotkeys1, hotkeys2):
 
     #''.join(i for i in str(minvalueentry.get()) if i.isdigit())
     writesettingsfile = open('./Settings.txt','w')
-    writesettingsfile.write(hotkeys1 + '|' + ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) + '|' + hotkeys2 + '|' + ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) + '|' + ''.join(i for i in str(maxvalueentry.get()) if i.isdigit()))
+    writesettingsfile.write(hotkeys1 + '|' + ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) + '|' + hotkeys2 + '|' + ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) + '|' + ''.join(i for i in str(maxvalueentry.get()) if i.isdigit())+ '|' + '0')
     writesettingsfile.close()
 
     root.destroy()
@@ -56,7 +56,7 @@ def main():
     readsettingsline = readsettingsfilelines[0]
 
     hotkeys1 = str(readsettingsline.split('|')[0]+'|'+readsettingsline.split('|')[1]+'|'+readsettingsline.split('|')[2]+'|'+readsettingsline.split('|')[3]+'|'+readsettingsline.split('|')[4]+'|'+readsettingsline.split('|')[5])
-    hotkeys2 = str(readsettingsline.split('|')[7]+'|'+readsettingsline.split('|')[8]+'|'+readsettingsline.split('|')[9]+'|'+readsettingsline.split('|')[10])
+    hotkeys2 = str(readsettingsline.split('|')[7]+'|'+readsettingsline.split('|')[8]+'|'+readsettingsline.split('|')[9]+'|'+readsettingsline.split('|')[10]+'|'+readsettingsline.split('|')[11])
 
     originalmin = str(readsettingsline.split('|')[11])
     originalmax = str(readsettingsline.split('|')[12])

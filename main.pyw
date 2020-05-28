@@ -36,23 +36,31 @@ def main(running):
         if morkcheckbuttonvar.get() == 1:
             if lcbbuttonvar.get() == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
-                win32api.Sleep(int(cpsvalue.get()))
+                if str(settingslines[0].split('|')[13]) == '0':
+                    win32api.Sleep(int(cpsvalue.get()))
                 win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
 
             if mcbbuttonvar.get() == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
-                win32api.Sleep(int(cpsvalue.get()))
+                if str(settingslines[0].split('|')[13]) == '0':
+                    win32api.Sleep(int(cpsvalue.get()))
                 win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
 
             if rcbbuttonvar.get() == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
-                win32api.Sleep(int(cpsvalue.get()))
+                if str(settingslines[0].split('|')[13]) == '0':
+                    win32api.Sleep(int(cpsvalue.get()))
                 win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
+        
         if morkcheckbuttonvar.get() == 0:
             for a in range(len(keyboardentry.get().split(','))):
                 win32api.keybd_event(ord(keyboardentry.get().split(',')[a]),0)
-                win32api.Sleep(int(cpsvalue.get()))
+                if str(settingslines[0].split('|')[13]) == '0':
+                    win32api.Sleep(int(cpsvalue.get()))
                 print(keyboardentry.get().split(',')[a])
+
+        if str(settingslines[0].split('|')[13]) == '1':
+            win32api.Sleep(int(cpsvalue.get()))
 
         root.after(1,lambda: main(running))
         
@@ -72,14 +80,14 @@ def Stop(running):
 
 def sethotkey():
     hotkeyfile = open('./Settings.txt','w')
-    hotkeyfile.write(starthotkeyentry.get() + '|' + stophotkeyentry.get() + '|' + lcbhotkey.get() + '|' + mcbhotkey.get() + '|' + rcbhotkey.get() + '|' + str(morkcheckbuttonvar.get()) + '|' + str(cpsvalue.get()) + '|' + str(lcbbuttonvar.get()) + '|' + str(mcbbuttonvar.get()) + '|' + str(rcbbuttonvar.get()) + '|' + str(keyboardentry.get()) + '|' + settingslines[0].split('|')[11] + '|' + settingslines[0].split('|')[12])
+    hotkeyfile.write(starthotkeyentry.get() + '|' + stophotkeyentry.get() + '|' + lcbhotkey.get() + '|' + mcbhotkey.get() + '|' + rcbhotkey.get() + '|' + str(morkcheckbuttonvar.get()) + '|' + str(cpsvalue.get()) + '|' + str(lcbbuttonvar.get()) + '|' + str(mcbbuttonvar.get()) + '|' + str(rcbbuttonvar.get()) + '|' + str(keyboardentry.get()) + '|' + settingslines[0].split('|')[11] + '|' + settingslines[0].split('|')[12] + '|' + '0')
     hotkeyfile.close()
     root.destroy()
     import main
 
 def restoredefault():
     hotkeyfile = open('./Settings.txt','w')
-    hotkeyfile.write(str('|||||1|0|1|0|0||1|1000'))
+    hotkeyfile.write(str('|||||1|0|1|0|0||1|1000|0'))
     hotkeyfile.close()
     root.destroy()
     import main
@@ -178,7 +186,7 @@ def changeclickmode():
 
 #beutiful gui
 root = Tk()
-root.title('Open_Clicker 3')
+root.title('Open_Clicker 4')
 root.config(bg = '#0F151D')
 root.resizable(0,0)
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='./favicon.png'))
@@ -348,7 +356,7 @@ scriptbotphoto=PhotoImage(file="logo.png")
 scriptbotlogo.config(image=scriptbotphoto)
 scriptbotlogo.pack(anchor = E)
 
-version = Label(root, text = 'Version 4.0 PRODUCTION', bg = '#0F151D', fg = '#C96C00')
+version = Label(root, text = 'Version 4.0', bg = '#0F151D', fg = '#C96C00')
 version.pack(anchor = E)
 
 #toaster = ToastNotifier()
