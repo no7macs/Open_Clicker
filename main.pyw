@@ -1,6 +1,6 @@
 from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage
 #from tkinter import *
-import webbrowser, keyboard
+import webbrowser, keyboard, json
 import win32api, win32con
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
@@ -36,30 +36,30 @@ def main(running):
         if morkcheckbuttonvar.get() == 1:
             if lcbbuttonvar.get() == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
-                if str(settingslines[0].split('|')[13]) == '0':
+                if str(loadedjsonsettings['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue.get()))
                 win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
 
             if mcbbuttonvar.get() == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
-                if str(settingslines[0].split('|')[13]) == '0':
+                if str(loadedjsonsettings['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue.get()))
                 win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
 
             if rcbbuttonvar.get() == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
-                if str(settingslines[0].split('|')[13]) == '0':
+                if str(loadedjsonsettings['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue.get()))
                 win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
         
         if morkcheckbuttonvar.get() == 0:
             for a in range(len(keyboardentry.get().split(','))):
                 win32api.keybd_event(ord(keyboardentry.get().split(',')[a]),0)
-                if str(settingslines[0].split('|')[13]) == '0':
+                if str(loadedjsonsettings['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue.get()))
                 print(keyboardentry.get().split(',')[a])
 
-        if str(settingslines[0].split('|')[13]) == '1':
+        if str(loadedjsonsettings['timeouttypes']) == '1':
             win32api.Sleep(int(cpsvalue.get()))
 
         root.after(1,lambda: main(running))
@@ -78,56 +78,18 @@ def Stop(running):
     #toaster.show_toast('Open_Clicker','Stopped', duration = 5, icon_path='./favicon.ico')
     root.after(100,lambda: main(running))
 
-def sethotkey():
-    hotkeyfile = open('./Settings.txt','w')
-    hotkeyfile.write(starthotkeyentry.get() + '|' + stophotkeyentry.get() + '|' + lcbhotkey.get() + '|' + mcbhotkey.get() + '|' + rcbhotkey.get() + '|' + str(morkcheckbuttonvar.get()) + '|' + str(cpsvalue.get()) + '|' + str(lcbbuttonvar.get()) + '|' + str(mcbbuttonvar.get()) + '|' + str(rcbbuttonvar.get()) + '|' + str(keyboardentry.get()) + '|' + settingslines[0].split('|')[11] + '|' + settingslines[0].split('|')[12] + '|' + '0')
-    hotkeyfile.close()
+def sethotkey(loadedjsonsettings):
+
+    with open('./json_settings.json','w') as settingsfile:
+
+        loadedjsonsettings["lcbhotkey"] = lcbhotkey.get()
+        loadedjsonsettings["mcbhotkey"] = mcbhotkey.get()
+        loadedjsonsettings["rcbhotkey"] = rcbhotkey.get()
+
+        json.dump(loadedjsonsettings, settingsfile)
+
     root.destroy()
     import main
-
-def restoredefault():
-    hotkeyfile = open('./Settings.txt','w')
-    hotkeyfile.write(str('|||||1|0|1|0|0||1|1000|0'))
-    hotkeyfile.close()
-    root.destroy()
-    import main
-
-def resethotkey(): 
-
-    lcblabel.config(state='normal')
-    mcblabel.config(state='normal')
-    rcblabel.config(state='normal')
-    lcbcheckbox.config(state='normal')
-    mcbcheckbox.config(state='normal')
-    rcbcheckbox.config(state='normal')
-    lcbhotkeylabel.config(state='normal')
-    mcbhotkeylabel.config(state='normal')
-    rcbhotkeylabel.config(state='normal')
-    lcbhotkey.config(state='normal')
-    mcbhotkey.config(state='normal')
-    rcbhotkey.config(state='normal')
-    keyboardlabel.config(state='normal')
-    keyboardentry.config(state='normal')
-
-    starthotkeyentry.delete(0,END)
-    starthotkeyentry.insert(0,originstarthotkey)
-
-    stophotkeyentry.delete(0,END)
-    stophotkeyentry.insert(0,originstophotkey)
-
-    lcbhotkey.delete(0,END)
-    lcbhotkey.insert(0,originlcbhotkey)
-
-    mcbhotkey.delete(0,END)
-    mcbhotkey.insert(0,originmcbhotkey)
-
-    rcbhotkey.delete(0,END)
-    rcbhotkey.insert(0,originrcbhotkey)
-
-    keyboardentry.delete(0,END)
-    keyboardentry.insert(0,originkeyboardentry)
-
-    changeclickmode()
 
 def scriptbotlink():
     webbrowser.open('https://script-bot.netlify.com')
@@ -213,17 +175,24 @@ setandresethotkeyframe.pack(side = LEFT)
 restoredefaultframe = Frame(classichotkeyframe, bg = '#0F151D')
 restoredefaultframe.pack(side = LEFT)
 
+#Legacy settings file
 settingsfile = open('./Settings.txt','r')
 settingslines = settingsfile.readlines()
+
+#Super cool json file
+settingsfile = open('./json_settings.json','r')
+jsondata = settingsfile.read()
+loadedjsonsettings = json.loads(jsondata)
+settingsfile.close()
 
 cpsvalue = IntVar()
 cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
 cpsvaluelabel.pack(side = TOP)
-cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(settingslines[0].split('|')[11]), to = int(settingslines[0].split('|')[12]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
+cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["mincpsval"]), to = int(loadedjsonsettings["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
 cpsslider.pack(side = LEFT)
 changecpssliderlimits = Button(cpsframe, text = 'Change cps slider limits', command = lambda: changecpslimits(), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
 changecpssliderlimits.pack(side = LEFT)
-cpsslider.set(int(settingslines[0].split('|')[6]))
+cpsslider.set(int(loadedjsonsettings["cpspreviousval"]))
 
 startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(running), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
 startbutton.pack(anchor = W)
@@ -244,18 +213,13 @@ stophoykeylabel.pack(side = LEFT)
 stophotkeyentry = Entry(stophotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
 stophotkeyentry.pack(side = LEFT)
 
-sethotkeybutton = Button(setandresethotkeyframe, text = '  Set HotKey  ', command = sethotkey, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+sethotkeybutton = Button(setandresethotkeyframe, text = '  Set HotKey  ', command = lambda: sethotkey(loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
 sethotkeybutton.pack(anchor = W)
-Resethotkey = Button(setandresethotkeyframe, text = 'Reset HotKey', command = resethotkey, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-Resethotkey.pack(anchor = W)
 
-retoredefaultbutton = Button(restoredefaultframe, text = 'Reset Default', command = restoredefault, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-retoredefaultbutton.pack(anchor = W)
-
-originstarthotkey = settingslines[0].split('|')[0].upper()
+originstarthotkey = loadedjsonsettings["Starthotkey"]
 starthotkeyentry.delete(0,END)
 starthotkeyentry.insert(0,originstarthotkey)
-originstophotkey = settingslines[0].split('|')[1].upper()
+originstophotkey = loadedjsonsettings["Stophotkey"]
 stophotkeyentry.delete(0,END)
 stophotkeyentry.insert(0,originstophotkey)
 
@@ -281,7 +245,7 @@ mousecheckbutton = Checkbutton(selectkeyboardormouseframe, pady = 15,text = 'mou
 mousecheckbutton.pack(anchor = W)
 keyboardcheckbutton = Checkbutton(selectkeyboardormouseframe, pady = 15, text = 'keyboard', variable = morkcheckbuttonvar, onvalue = 0, offvalue = 1, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F', command = lambda: changeclickmode())
 keyboardcheckbutton.pack(anchor = W)
-morkcheckbuttonvar.set(settingslines[0].split('|')[5])
+morkcheckbuttonvar.set(loadedjsonsettings["mouseorkeyboard"])
 
 #mouse button stuff
 #mouse button setting frames
@@ -311,9 +275,9 @@ mcbcheckbox = Checkbutton(buttoncheckboxframe, variable = mcbbuttonvar, onvalue 
 mcbcheckbox.pack(anchor = W)
 rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
 rcbcheckbox.pack(anchor = W)
-lcbbuttonvar.set(settingslines[0].split('|')[7])
-mcbbuttonvar.set(settingslines[0].split('|')[8])
-rcbbuttonvar.set(settingslines[0].split('|')[9])
+lcbbuttonvar.set(loadedjsonsettings["lcbenabled"])
+mcbbuttonvar.set(loadedjsonsettings["mcbenabled"])
+rcbbuttonvar.set(loadedjsonsettings["rcbenabled"])
 
 lcbhotkeylabel = Label(buttonhotkeylabel, text = 'LCB Hotkey  ', bg = '#0F151D', fg = '#C96C00')
 lcbhotkeylabel.pack(anchor = W)
@@ -329,13 +293,13 @@ mcbhotkey.pack(anchor = W)
 rcbhotkey = Entry(buttonhotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
 rcbhotkey.pack(anchor = W)
 
-originlcbhotkey = settingslines[0].split('|')[2].upper()
+originlcbhotkey = loadedjsonsettings["lcbhotkey"]
 lcbhotkey.delete(0,END)
 lcbhotkey.insert(0,originlcbhotkey)
-originmcbhotkey = settingslines[0].split('|')[3].upper()
+originmcbhotkey = loadedjsonsettings["mcbhotkey"]
 mcbhotkey.delete(0,END)
 mcbhotkey.insert(0,originmcbhotkey)
-originrcbhotkey = settingslines[0].split('|')[4].upper()
+originrcbhotkey = loadedjsonsettings["rcbhotkey"]
 rcbhotkey.delete(0,END)
 rcbhotkey.insert(0,originrcbhotkey)
 
@@ -345,7 +309,7 @@ keyboardlabel = Label(keyboardstuff, text = 'Keboard keys:', bg = '#0F151D', fg 
 keyboardlabel.pack(side = LEFT)
 keyboardentry = Entry(keyboardstuff, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
 keyboardentry.pack(side = LEFT)
-originkeyboardentry = settingslines[0].split('|')[10].upper()
+originkeyboardentry = loadedjsonsettings["keyboardkeys"]
 keyboardentry.delete(0,END)
 keyboardentry.insert(0,originkeyboardentry)
 
