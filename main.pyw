@@ -2,6 +2,7 @@ from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Sc
 #from tkinter import *
 import webbrowser, keyboard, json
 import win32api, win32con
+import multiprocessing
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
 #from win10toast import ToastNotifier
@@ -175,15 +176,11 @@ setandresethotkeyframe.pack(side = LEFT)
 restoredefaultframe = Frame(classichotkeyframe, bg = '#0F151D')
 restoredefaultframe.pack(side = LEFT)
 
-#Legacy settings file
-settingsfile = open('./Settings.txt','r')
-settingslines = settingsfile.readlines()
-
 #Super cool json file
-settingsfile = open('./json_settings.json','r')
-jsondata = settingsfile.read()
-loadedjsonsettings = json.loads(jsondata)
-settingsfile.close()
+with open('./json_settings.json','r') as settingsfile:
+    jsondata = settingsfile.read()
+    loadedjsonsettings = json.loads(jsondata)
+    settingsfile.close()
 
 cpsvalue = IntVar()
 cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')

@@ -1,8 +1,8 @@
 #from tkinter import *
 from tkinter import Tk, Frame, Label, Entry, Button, TOP, END, PhotoImage, LEFT 
-import win32api
+import win32api, json
 
-def save(root, minvalueentry, maxvalueentry, hotkeys1, hotkeys2):
+def save(root, minvalueentry, maxvalueentry, loadedjsonsettings):
     if ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) == '' or ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) == '0':
         minvalueentry.delete(0,END)
         minvalueentry.insert(0,1)
@@ -11,9 +11,13 @@ def save(root, minvalueentry, maxvalueentry, hotkeys1, hotkeys2):
         maxvalueentry.insert(0,1000)
 
     #''.join(i for i in str(minvalueentry.get()) if i.isdigit())
-    writesettingsfile = open('./Settings.txt','w')
-    writesettingsfile.write(hotkeys1 + '|' + ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) + '|' + hotkeys2 + '|' + ''.join(i for i in str(minvalueentry.get()) if i.isdigit()) + '|' + ''.join(i for i in str(maxvalueentry.get()) if i.isdigit())+ '|' + '0')
-    writesettingsfile.close()
+
+    with open('./json_settings.json', 'w') as writesettingsfile:
+
+        loadedjsonsettings['mincpsval'] = minvalueentry.get()
+        loadedjsonsettings['maxcpsval'] = maxvalueentry.get()
+
+        json.dump(loadedjsonsettings, writesettingsfile)
 
     root.destroy()
     import main
@@ -51,17 +55,13 @@ def main():
 
 
     #opening file and setting values
-    readsettingsfile = open('Settings.txt','r')
-    readsettingsfilelines = readsettingsfile.readlines()
-    readsettingsline = readsettingsfilelines[0]
+    with open('./json_settings.json','r') as settingsfile:
+        jsondata = settingsfile.read()
+        loadedjsonsettings = json.loads(jsondata)
+        settingsfile.close()
 
-    hotkeys1 = str(readsettingsline.split('|')[0]+'|'+readsettingsline.split('|')[1]+'|'+readsettingsline.split('|')[2]+'|'+readsettingsline.split('|')[3]+'|'+readsettingsline.split('|')[4]+'|'+readsettingsline.split('|')[5])
-    hotkeys2 = str(readsettingsline.split('|')[7]+'|'+readsettingsline.split('|')[8]+'|'+readsettingsline.split('|')[9]+'|'+readsettingsline.split('|')[10]+'|'+readsettingsline.split('|')[11])
-
-    originalmin = str(readsettingsline.split('|')[11])
-    originalmax = str(readsettingsline.split('|')[12])
-
-    readsettingsfile.close()
+    originalmin = str(loadedjsonsettings['mincpsval'])
+    originalmax = str(loadedjsonsettings['maxcpsval'])
 
     #Inputing current numbers into the entrys
     minvalueentry.delete(0,END)
@@ -71,7 +71,7 @@ def main():
 
     #Save and Cancel button
 
-    savebutton = Button(saveandcancelframe, text = 'Save', command = lambda: save(root, minvalueentry, maxvalueentry, hotkeys1, hotkeys2), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+    savebutton = Button(saveandcancelframe, text = 'Save', command = lambda: save(root, minvalueentry, maxvalueentry, loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     savebutton.pack(side = LEFT)
 
     stopbutton = Button(saveandcancelframe, text = 'Cancel', command = lambda: cancel(root), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
