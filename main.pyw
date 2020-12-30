@@ -2,13 +2,46 @@ from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Sc
 #from tkinter import *
 import webbrowser, keyboard, json
 import win32api, win32con
-import multiprocessing
+import multiprocessing, admin
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
 #from win10toast import ToastNotifier
-running = int(0)
 
-def main(running):
+def running():
+    x = int()
+    y = int()
+    if morkcheckbuttonvar.get() == 1:
+        if lcbbuttonvar.get() == 1:
+            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
+            if str(loadedjsonsettings['timeouttypes']) == '0':
+                win32api.Sleep(int(cpsvalue.get()))
+            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
+
+        if mcbbuttonvar.get() == 1:
+            win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
+            if str(loadedjsonsettings['timeouttypes']) == '0':
+                win32api.Sleep(int(cpsvalue.get()))
+            win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
+
+        if rcbbuttonvar.get() == 1:
+            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
+            if str(loadedjsonsettings['timeouttypes']) == '0':
+                win32api.Sleep(int(cpsvalue.get()))
+            win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
+        
+    if morkcheckbuttonvar.get() == 0:
+        for a in range(len(keyboardentry.get().split(','))):
+            win32api.keybd_event(ord(keyboardentry.get().split(',')[a]),0)
+            if str(loadedjsonsettings['timeouttypes']) == '0':
+                win32api.Sleep(int(cpsvalue.get()))
+            print(keyboardentry.get().split(',')[a])
+
+    if str(loadedjsonsettings['timeouttypes']) == '1':
+        win32api.Sleep(int(cpsvalue.get()))
+
+    running()
+
+def main():
 
     if lcbhotkey.get() != '':
         #if keyboard.is_pressed(lcbhotkey.get()): togglelcb()
@@ -20,64 +53,34 @@ def main(running):
         #if win32api.GetAsyncKeyState(ord(str(rcbhotkey.get()))) != 0: togglercb()
         if keyboard.is_pressed(rcbhotkey.get()): togglercb()
 
-    x = int()
-    y = int()
     if starthotkeyentry.get() != '':
         if keyboard.is_pressed(starthotkeyentry.get()): 
-            running = int(1)
+            p = multiprocessing.Process(target=running, args = (), name='OC-click')
             win32api.Sleep(1000)
             #toaster.show_toast('Open_Clicker','Started', duration = 2, icon_path='./favicon.ico')
     if stophotkeyentry.get() != '': 
         if keyboard.is_pressed(stophotkeyentry.get()): 
-            running = int(2)
+            p.terminate()
+            p.join()
             win32api.Sleep(1000)
             #toaster.show_toast('Open_Clicker','Stopped', duration = 2, icon_path='./favicon.ico')
 
-    if running == 1:
-        if morkcheckbuttonvar.get() == 1:
-            if lcbbuttonvar.get() == 1:
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
-                    win32api.Sleep(int(cpsvalue.get()))
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
-
-            if mcbbuttonvar.get() == 1:
-                win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
-                    win32api.Sleep(int(cpsvalue.get()))
-                win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
-
-            if rcbbuttonvar.get() == 1:
-                win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
-                    win32api.Sleep(int(cpsvalue.get()))
-                win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
+    if not admin.isUserAdmin():
+        admin.runAsAdmin()
         
-        if morkcheckbuttonvar.get() == 0:
-            for a in range(len(keyboardentry.get().split(','))):
-                win32api.keybd_event(ord(keyboardentry.get().split(',')[a]),0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
-                    win32api.Sleep(int(cpsvalue.get()))
-                print(keyboardentry.get().split(',')[a])
-
-        if str(loadedjsonsettings['timeouttypes']) == '1':
-            win32api.Sleep(int(cpsvalue.get()))
-
-        root.after(1,lambda: main(running))
-        
-    else: root.after(100,lambda: main(running))
+    root.after(1, lambda: main())
 
 def Start(running):
     running = int(1)
     print('START')
     #toaster.show_toast('Open_Clicker','Started', duration = 5, icon_path='./favicon.ico')
-    root.after(100,lambda: main(running))
+    root.after(100,lambda: main())
 
 def Stop(running):
     running = int(2)
     print('STOP')
     #toaster.show_toast('Open_Clicker','Stopped', duration = 5, icon_path='./favicon.ico')
-    root.after(100,lambda: main(running))
+    root.after(100,lambda: main())
 
 def sethotkey(loadedjsonsettings):
 
@@ -324,5 +327,5 @@ version.pack(anchor = E)
 
 changeclickmode()
 
-root.after(1000,lambda: main(running))
+root.after(1000,lambda: main())
 root.mainloop()
