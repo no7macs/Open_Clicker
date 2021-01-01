@@ -59,44 +59,39 @@ def main(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboarde
     if starthotkeyentry.get() != '':
         if keyboard.is_pressed(starthotkeyentry.get()): 
             #morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
-            global p
-            process_list.append(str(random.randint(0,999)))
-            print(process_list)
-            p = multiprocessing.Process(target=running, args=(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=(process_list[len(process_list)-1]))
-            process_list[len(process_list)-1] = p
-            p.start()
-            win32api.Sleep(1000)
+            Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings)
             #toaster.show_toast('Open_Clicker','Started', duration = 2, icon_path='./favicon.ico')
     if stophotkeyentry.get() != '': 
         if keyboard.is_pressed(stophotkeyentry.get()): 
             if bool(process_list) == True:
-                p = process_list[len(process_list-1)]
+                p = process_list[len(process_list)-1]
                 p.terminate()
                 p.join()
-                del(process_list[len(process_list-1)])
+                del(process_list[len(process_list)-1])
             win32api.Sleep(1000)
             #toaster.show_toast('Open_Clicker','Stopped', duration = 2, icon_path='./favicon.ico')
         
     root.after(1, lambda: main(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings))
 
-def Start():
-    global p
-    process_list.append(str(random.randint(0,999)))
-    p = multiprocessing.Process(target=running, args = (morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings.get()), name=process_list[len(process_list)-1])
-    process_list[len(process_list)-1] = p
-    print(p)
-    p.start()
-    win32api.Sleep(1000)
+def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
+    if not len(process_list) >= 1:
+        global p
+        process_list.append(str(random.randint(0,999)))
+        p = multiprocessing.Process(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
+        process_list[len(process_list)-1] = p
+        print(p)
+        p.start()
+    win32api.Sleep(100)
     print('START')
     #toaster.show_toast('Open_Clicker','Started', duration = 5, icon_path='./favicon.ico')
     return
 
 def Stop():
     if bool(process_list) == True:
-        p = process_list[len(process_list-1)]
+        p = process_list[len(process_list)-1]
         p.terminate()
         p.join()
-        del(process_list[len(process_list-1)])
+        del(process_list[len(process_list)-1])
     print('STOP')
     #toaster.show_toast('Open_Clicker','Stopped', duration = 5, icon_path='./favicon.ico')
     return
@@ -213,7 +208,7 @@ if __name__ == '__main__':
     changecpssliderlimits.pack(side = LEFT)
     cpsslider.set(int(loadedjsonsettings["cpspreviousval"]))
 
-    startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+    startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     startbutton.pack(anchor = W)
     stopbutton = Button(startandstopframe, text = 'Stop', command = lambda: Stop(), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     stopbutton.pack(anchor = W)
@@ -339,7 +334,7 @@ if __name__ == '__main__':
     scriptbotlogo.config(image=scriptbotphoto)
     scriptbotlogo.pack(anchor = E)
 
-    version = Label(root, text = 'Version 4.0', bg = '#0F151D', fg = '#C96C00')
+    version = Label(root, text = 'Version 4.5', bg = '#0F151D', fg = '#C96C00')
     version.pack(anchor = E)
 
     #toaster = ToastNotifier()
