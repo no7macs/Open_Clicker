@@ -10,6 +10,7 @@ import multiprocessing, random
 global process_list
 process_list = []
 
+#Runs in seperate process
 def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
 
     while True:
@@ -44,7 +45,9 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
         if str(loadedjsonsettings['timeouttypes']) == '1':
             win32api.Sleep(int(cpsvalue))
 
-def main(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
+def main():
+    # morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
+    # morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings
 
     if lcbhotkey.get() != '':
         #if keyboard.is_pressed(lcbhotkey.get()): togglelcb()
@@ -59,21 +62,18 @@ def main(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboarde
     if starthotkeyentry.get() != '':
         if keyboard.is_pressed(starthotkeyentry.get()): 
             #morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
-            Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings)
+            Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings)
             #toaster.show_toast('Open_Clicker','Started', duration = 2, icon_path='./favicon.ico')
     if stophotkeyentry.get() != '': 
         if keyboard.is_pressed(stophotkeyentry.get()): 
-            if bool(process_list) == True:
-                p = process_list[len(process_list)-1]
-                p.terminate()
-                p.join()
-                del(process_list[len(process_list)-1])
+            Stop()
             win32api.Sleep(1000)
             #toaster.show_toast('Open_Clicker','Stopped', duration = 2, icon_path='./favicon.ico')
         
-    root.after(1, lambda: main(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings))
+    root.after(1, lambda: main())
 
 def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
+    print(str(cpsvalue))
     if not len(process_list) >= 1:
         global p
         process_list.append(str(random.randint(0,999)))
@@ -334,12 +334,12 @@ if __name__ == '__main__':
     scriptbotlogo.config(image=scriptbotphoto)
     scriptbotlogo.pack(anchor = E)
 
-    version = Label(root, text = 'Version 4.5', bg = '#0F151D', fg = '#C96C00')
+    version = Label(root, text = 'Version 4.1', bg = '#0F151D', fg = '#C96C00')
     version.pack(anchor = E)
 
     #toaster = ToastNotifier()
 
     changeclickmode()
 
-    root.after(1000,lambda: main(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings))
+    root.after(1000,lambda: main())
     root.mainloop()
