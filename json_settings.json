@@ -1,1 +1,26 @@
-{"mincpsval": "1", "maxcpsval": "100", "cpspreviousval": 0, "Starthotkey": "q", "Stophotkey": "w", "mouseorkeyboard": 1, "lcbenabled": 1, "mcbenabled": 0, "rcbenabled": 0, "lcbhotkey": "", "mcbhotkey": "", "rcbhotkey": "", "keyboardkeys": "", "timeouttypes": 0}
+{
+    "about": {
+        "version":"5.0.0",
+        "displayVersion":"5"
+    },
+    "savestate": {
+        "mouseorkeyboard": 1,
+        "lcbenabled": 1,
+        "rcbenabled": 0,
+        "mcbenabled": 0,
+        "mincpsval": "1",
+        "maxcpsval": "1000",
+        "cpspreviousval": 0,
+        "Starthotkey": "q",
+        "Stophotkey": "w",
+        "lcbhotkey": "",
+        "mcbhotkey": "",
+        "rcbhotkey": "",
+        "keyboardkeys": "",
+        "timeouttypes": 1
+    },
+    "Settings": {
+        "runOnStartup": true,
+        "startMinimize": true
+    }
+}

@@ -3,10 +3,11 @@ from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Sc
 import webbrowser, keyboard, json
 import win32api, win32con
 import multiprocessing, random
+#from win10toast import ToastNotifier
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
-#from win10toast import ToastNotifier
 
+#toaster = ToastNotifier()
 global process_list
 process_list = []
 
@@ -19,33 +20,33 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
         if morkcheckbuttonvar == 1:
             if lcbbuttonvar == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
+                if str(loadedjsonsettings["savestate"]['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue))
                 win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)
 
             if mcbbuttonvar == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
+                if str(loadedjsonsettings["savestate"]['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue))
                 win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)
 
             if rcbbuttonvar == 1:
                 win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
+                if str(loadedjsonsettings["savestate"]['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue))
                 win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)
             
         if morkcheckbuttonvar == 0:
             for a in range(len(keyboardentry.split(','))):
                 win32api.keybd_event(ord(keyboardentry.split(',')[a]),0)
-                if str(loadedjsonsettings['timeouttypes']) == '0':
+                if str(loadedjsonsettings["savestate"]['timeouttypes']) == '0':
                     win32api.Sleep(int(cpsvalue))
                 print(keyboardentry.split(',')[a])
 
-        if str(loadedjsonsettings['timeouttypes']) == '1':
+        if str(loadedjsonsettings["savestate"]['timeouttypes']) == '1':
             win32api.Sleep(int(cpsvalue))
 
-def main():
+def main(loadedjsonsettings):
     # morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
     # morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings
 
@@ -68,9 +69,8 @@ def main():
         if keyboard.is_pressed(stophotkeyentry.get()): 
             Stop()
             win32api.Sleep(1000)
-            #toaster.show_toast('Open_Clicker','Stopped', duration = 2, icon_path='./favicon.ico')
-        
-    root.after(1, lambda: main())
+    
+    root.after(1, lambda: main(loadedjsonsettings))
 
 def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
     print(str(cpsvalue))
@@ -83,7 +83,7 @@ def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboard
         p.start()
     win32api.Sleep(100)
     print('START')
-    #toaster.show_toast('Open_Clicker','Started', duration = 5, icon_path='./favicon.ico')
+    #toaster.show_toast('Open_Clicker','Started', duration = 1, icon_path='./favicon.ico')
     return
 
 def Stop():
@@ -100,11 +100,11 @@ def sethotkey(loadedjsonsettings):
 
     with open('./json_settings.json','w') as settingsfile:
 
-        loadedjsonsettings["lcbhotkey"] = lcbhotkey.get()
-        loadedjsonsettings["mcbhotkey"] = mcbhotkey.get()
-        loadedjsonsettings["rcbhotkey"] = rcbhotkey.get()
+        loadedjsonsettings["savestate"]["lcbhotkey"] = lcbhotkey.get()
+        loadedjsonsettings["savestate"]["mcbhotkey"] = mcbhotkey.get()
+        loadedjsonsettings["savestate"]["rcbhotkey"] = rcbhotkey.get()
 
-        json.dump(loadedjsonsettings, settingsfile)
+        json.dump(loadedjsonsettings, settingsfile, indent = 4)
 
     root.destroy()
     import main
@@ -164,9 +164,16 @@ def changeclickmode():
     return
 
 if __name__ == '__main__':
+
+    #Super cool json file
+    with open('./json_settings.json','r') as settingsfile:
+        jsondata = settingsfile.read()
+        loadedjsonsettings = json.loads(jsondata)
+        settingsfile.close()
+
     #beutiful gui
     root = Tk()
-    root.title('Open_Clicker 4')
+    root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'])
     root.config(bg = '#0F151D')
     root.resizable(0,0)
     root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='./favicon.png'))
@@ -193,20 +200,14 @@ if __name__ == '__main__':
     restoredefaultframe = Frame(classichotkeyframe, bg = '#0F151D')
     restoredefaultframe.pack(side = LEFT)
 
-    #Super cool json file
-    with open('./json_settings.json','r') as settingsfile:
-        jsondata = settingsfile.read()
-        loadedjsonsettings = json.loads(jsondata)
-        settingsfile.close()
-
     cpsvalue = IntVar()
     cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
     cpsvaluelabel.pack(side = TOP)
-    cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["mincpsval"]), to = int(loadedjsonsettings["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
+    cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["savestate"]["mincpsval"]), to = int(loadedjsonsettings["savestate"]["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
     cpsslider.pack(side = LEFT)
     changecpssliderlimits = Button(cpsframe, text = 'Change cps slider limits', command = lambda: changecpslimits(), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     changecpssliderlimits.pack(side = LEFT)
-    cpsslider.set(int(loadedjsonsettings["cpspreviousval"]))
+    cpsslider.set(int(loadedjsonsettings["savestate"]["cpspreviousval"]))
 
     startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     startbutton.pack(anchor = W)
@@ -230,10 +231,10 @@ if __name__ == '__main__':
     sethotkeybutton = Button(setandresethotkeyframe, text = '  Set HotKey  ', command = lambda: sethotkey(loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     sethotkeybutton.pack(anchor = W)
 
-    originstarthotkey = loadedjsonsettings["Starthotkey"]
+    originstarthotkey = loadedjsonsettings["savestate"]["Starthotkey"]
     starthotkeyentry.delete(0,END)
     starthotkeyentry.insert(0,originstarthotkey)
-    originstophotkey = loadedjsonsettings["Stophotkey"]
+    originstophotkey = loadedjsonsettings["savestate"]["Stophotkey"]
     stophotkeyentry.delete(0,END)
     stophotkeyentry.insert(0,originstophotkey)
 
@@ -259,7 +260,7 @@ if __name__ == '__main__':
     mousecheckbutton.pack(anchor = W)
     keyboardcheckbutton = Checkbutton(selectkeyboardormouseframe, pady = 15, text = 'keyboard', variable = morkcheckbuttonvar, onvalue = 0, offvalue = 1, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F', command = lambda: changeclickmode())
     keyboardcheckbutton.pack(anchor = W)
-    morkcheckbuttonvar.set(loadedjsonsettings["mouseorkeyboard"])
+    morkcheckbuttonvar.set(loadedjsonsettings["savestate"]["mouseorkeyboard"])
 
     #mouse button stuff
     #mouse button setting frames
@@ -289,9 +290,9 @@ if __name__ == '__main__':
     mcbcheckbox.pack(anchor = W)
     rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     rcbcheckbox.pack(anchor = W)
-    lcbbuttonvar.set(loadedjsonsettings["lcbenabled"])
-    mcbbuttonvar.set(loadedjsonsettings["mcbenabled"])
-    rcbbuttonvar.set(loadedjsonsettings["rcbenabled"])
+    lcbbuttonvar.set(loadedjsonsettings["savestate"]["lcbenabled"])
+    mcbbuttonvar.set(loadedjsonsettings["savestate"]["mcbenabled"])
+    rcbbuttonvar.set(loadedjsonsettings["savestate"]["rcbenabled"])
 
     lcbhotkeylabel = Label(buttonhotkeylabel, text = 'LCB Hotkey  ', bg = '#0F151D', fg = '#C96C00')
     lcbhotkeylabel.pack(anchor = W)
@@ -307,13 +308,13 @@ if __name__ == '__main__':
     rcbhotkey = Entry(buttonhotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
     rcbhotkey.pack(anchor = W)
 
-    originlcbhotkey = loadedjsonsettings["lcbhotkey"]
+    originlcbhotkey = loadedjsonsettings["savestate"]["lcbhotkey"]
     lcbhotkey.delete(0,END)
     lcbhotkey.insert(0,originlcbhotkey)
-    originmcbhotkey = loadedjsonsettings["mcbhotkey"]
+    originmcbhotkey = loadedjsonsettings["savestate"]["mcbhotkey"]
     mcbhotkey.delete(0,END)
     mcbhotkey.insert(0,originmcbhotkey)
-    originrcbhotkey = loadedjsonsettings["rcbhotkey"]
+    originrcbhotkey = loadedjsonsettings["savestate"]["rcbhotkey"]
     rcbhotkey.delete(0,END)
     rcbhotkey.insert(0,originrcbhotkey)
 
@@ -323,7 +324,7 @@ if __name__ == '__main__':
     keyboardlabel.pack(side = LEFT)
     keyboardentry = Entry(keyboardstuff, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
     keyboardentry.pack(side = LEFT)
-    originkeyboardentry = loadedjsonsettings["keyboardkeys"]
+    originkeyboardentry = loadedjsonsettings["savestate"]["keyboardkeys"]
     keyboardentry.delete(0,END)
     keyboardentry.insert(0,originkeyboardentry)
 
@@ -334,12 +335,12 @@ if __name__ == '__main__':
     scriptbotlogo.config(image=scriptbotphoto)
     scriptbotlogo.pack(anchor = E)
 
-    version = Label(root, text = 'Version 4.1', bg = '#0F151D', fg = '#C96C00')
+    version = Label(root, text = 'Version ' + loadedjsonsettings['about']['version'], bg = '#0F151D', fg = '#C96C00')
     version.pack(anchor = E)
 
     #toaster = ToastNotifier()
 
     changeclickmode()
 
-    root.after(1000,lambda: main())
+    root.after(1000,lambda: main(loadedjsonsettings))
     root.mainloop()
