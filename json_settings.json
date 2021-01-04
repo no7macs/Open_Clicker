@@ -19,7 +19,7 @@
         "keyboardkeys": "",
         "timeouttypes": 1
     },
-    "Settings": {
+    "settings": {
         "runOnStartup": true,
         "startMinimize": true
     }
