@@ -1,5 +1,5 @@
 from tkinter import *
-import json
+import json, gc
 
 def save(loadedjsonsettings):
     loadedjsonsettings['settings']['runOnStartup'] = bool()
@@ -28,6 +28,9 @@ class hotKeyWindow(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self,*args,**kwargs)
 
+class generalSettingsWindow(Frame):
+    def __init__(self, *args, **kwargs):
+        Frame.__init__(self, *args, **kwargs)
 
 class mainView(Frame):
 
@@ -38,18 +41,30 @@ class mainView(Frame):
         container = Frame(self, bg = '#0F151D')
         container.pack(side=LEFT)
 
-        #hotKeys = hotKeyWindow(self)
+        hotKeys = hotKeyWindow(self, bg='#0F151D')
+        generalSettings = generalSettingsWindow(self, bg='#0F151D')
 
-        hotKeysButton = Button(buttons, justify = LEFT, command = cancel, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-        hotKeyButtonPhoto=PhotoImage(file="logo.png")
-        hotKeysButton.config(image=hotKeyButtonPhoto)
+        hotKeys.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        generalSettings.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+
+        hotKeys.pack(side='left')
+        generalSettings.pack(side='left')
+
+        generalButtonImage=PhotoImage(file="./icons/settings/general.png")
+        generalButton = Button(buttons, justify=LEFT, command=lambda:self.change('General', generalSettingsWindow), image=generalButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        generalButton.image = generalButtonImage
+        generalButton.pack(anchor = E)
+        hotKeyButtonPhoto=PhotoImage(file="./icons/settings/hotkey.png")
+        hotKeysButton = Button(buttons, justify=LEFT, command=lambda:self.change('HotKeys', hotKeyWindow), image=hotKeyButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        hotKeysButton.image = hotKeyButtonPhoto
         hotKeysButton.pack(anchor = E)
-        startupButton = Button(buttons, justify = LEFT, command = cancel, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-        startupButtonImage=PhotoImage(file="logo.png")
-        startupButton.config(image=startupButtonImage)
-        startupButton.pack(anchor = E)
+
+    def change(self, displayName, className):
+        className.lift(self)
+        return
 
 if __name__ == "__main__":
+
     root = Tk()
 
     root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings')
@@ -58,7 +73,7 @@ if __name__ == "__main__":
     #root.geometry('200x100')
     root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='./favicon.png'))
 
-    main = mainView(root)
+    main = mainView(root, bg='#0F151D')
     main.pack(anchor=W)
 
     root.mainloop()
