@@ -38,8 +38,15 @@ class mainView(Frame):
         Frame.__init__(self, *args, **kwargs)
         buttons = Frame(self, bg = '#0F151D')
         buttons.pack(side=LEFT)
-        container = Frame(self, bg = '#0F151D')
-        container.pack(side=LEFT)
+        afterButtonsFrame = Frame(self, bg = '#0F151D')
+        afterButtonsFrame.pack(side=TOP)
+        currentPageFrame = Frame(afterButtonsFrame, bg = '#0F151D')
+        currentPageFrame.pack(side=TOP)
+        container = Frame(afterButtonsFrame, bg = '#0F151D')
+        container.pack(side=TOP)
+
+        currentPageLabel = Label(currentPageFrame, text='n/a', bg = '#0F151D', fg = '#C96C00')
+        currentPageLabel.pack(anchor=W)
 
         hotKeys = hotKeyWindow(self, bg='#0F151D')
         generalSettings = generalSettingsWindow(self, bg='#0F151D')
@@ -51,15 +58,17 @@ class mainView(Frame):
         generalSettings.pack(side='left')
 
         generalButtonImage=PhotoImage(file="./icons/settings/general.png")
-        generalButton = Button(buttons, justify=LEFT, command=lambda:self.change('General', generalSettingsWindow), image=generalButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        generalButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'General', generalSettingsWindow), image=generalButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         generalButton.image = generalButtonImage
         generalButton.pack(anchor = E)
         hotKeyButtonPhoto=PhotoImage(file="./icons/settings/hotkey.png")
-        hotKeysButton = Button(buttons, justify=LEFT, command=lambda:self.change('HotKeys', hotKeyWindow), image=hotKeyButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        hotKeysButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'HotKeys', hotKeyWindow), image=hotKeyButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         hotKeysButton.image = hotKeyButtonPhoto
         hotKeysButton.pack(anchor = E)
 
-    def change(self, displayName, className):
+    def change(self, currentPageLabel, displayName, className):
+        currentPageLabel.config(text=displayName)
+        root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings ' + displayName)
         className.lift(self)
         return
 
