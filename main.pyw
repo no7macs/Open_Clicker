@@ -62,14 +62,15 @@ def main(loadedjsonsettings):
 
     if starthotkeyentry.get() != '':
         if keyboard.is_pressed(starthotkeyentry.get()): 
+            root.focus_set()
             #morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
             Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings)
             #toaster.show_toast('Open_Clicker','Started', duration = 2, icon_path='./favicon.ico')
     if stophotkeyentry.get() != '': 
         if keyboard.is_pressed(stophotkeyentry.get()): 
+            root.focus_set()
             Stop()
             win32api.Sleep(1000)
-    
     root.after(1, lambda: main(loadedjsonsettings))
 
 def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
@@ -81,6 +82,7 @@ def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboard
         process_list[len(process_list)-1] = p
         print(p)
         p.start()
+        save(loadedjsonsettings)
     win32api.Sleep(100)
     print('START')
     #toaster.show_toast('Open_Clicker','Started', duration = 1, icon_path='./favicon.ico')
@@ -96,29 +98,25 @@ def Stop():
     #toaster.show_toast('Open_Clicker','Stopped', duration = 5, icon_path='./favicon.ico')
     return
 
-def sethotkey(loadedjsonsettings):
-
-    with open('./json_settings.json','w') as settingsfile:
-
-        loadedjsonsettings["saveState"]["lcbhotkey"] = lcbhotkey.get()
-        loadedjsonsettings["saveState"]["mcbhotkey"] = mcbhotkey.get()
-        loadedjsonsettings["saveState"]["rcbhotkey"] = rcbhotkey.get()
-
-        json.dump(loadedjsonsettings, settingsfile, indent = 4)
-
-    root.destroy()
-    import main
-
 def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
-
+        #Will be changed when setings is expanded
+        loadedjsonsettings["saveState"]["mouseorkeyboard"] = morkcheckbuttonvar.get()
         loadedjsonsettings["saveState"]["lcbhotkey"] = lcbhotkey.get()
         loadedjsonsettings["saveState"]["mcbhotkey"] = mcbhotkey.get()
         loadedjsonsettings["saveState"]["rcbhotkey"] = rcbhotkey.get()
+        loadedjsonsettings["saveState"]["lcbenabled"] = lcbbuttonvar.get()
+        loadedjsonsettings["saveState"]["mcbenabled"] = mcbbuttonvar.get()
+        loadedjsonsettings["saveState"]["rcbenabled"] = rcbbuttonvar.get()
+        #loadedjsonsettings["saveState"]["mincpsval"] =     #later reference
+        #loadedjsonsettings["saveState"]["maxcpsval"] = 
+        loadedjsonsettings["saveState"]["cpspreviousval"] = cpsvalue.get()
+        loadedjsonsettings["saveState"]["Starthotkey"] = starthotkeyentry.get()
+        loadedjsonsettings["saveState"]["Stophotkey"] = stophotkeyentry.get()
 
         json.dump(loadedjsonsettings, settingsfile, indent = 4)
 
-    initVars(loadedjsonsettings)
+    #initVars(loadedjsonsettings)
     return
 
 def initVars(loadedjsonsettings):
