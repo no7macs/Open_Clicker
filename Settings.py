@@ -26,12 +26,20 @@ class hotKeyWindow(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self,*args,**kwargs)
 
+        hotKeyWindowFrame = Frame(self, bg = '#0F151D')
+        hotKeyWindowFrame.pack(side=LEFT)
+
+        hotKeyLabelFrame = Frame(hotKeyWindowFrame, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=120)
+        hotKeyLabelFrame.pack(side=TOP, expand=False)
+
 class generalSettingsWindow(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
 
+        generalSettingsWindowFrame = Frame(self, bg = '#0F151D')
+        generalSettingsWindowFrame.pack(side=LEFT)
         #Change cps limits
-        changeCPSLimitFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=120)
+        changeCPSLimitFrame = Frame(generalSettingsWindowFrame, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=120)
         changeCPSLimitFrame.pack(side=TOP, expand=False)
         changeCPSLimitFrame.pack_propagate(0)
         changeCPSLimitLabel = Label(changeCPSLimitFrame, text='change CPS slider limits', bg = '#0F151D', fg = '#C96C00')
@@ -46,7 +54,7 @@ class generalSettingsWindow(Frame):
         self.maxValueEntry.pack(side=TOP)
 
         #Startup and running stuff
-        runningStuffFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=75)
+        runningStuffFrame = Frame(generalSettingsWindowFrame, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=75)
         runningStuffFrame.pack(side=TOP, expand=False)
         runningStuffFrame.pack_propagate(0)
         runningTitlesFrame = Frame(runningStuffFrame, bg='#0F151D')
@@ -101,13 +109,15 @@ class mainView(Frame):
         currentPageFrame = Frame(afterButtonsFrame, bg = '#0F151D')
         currentPageFrame.pack(side=TOP)
         container = Frame(afterButtonsFrame, bg = '#0F151D')
-        container.pack(side=TOP)
+        container.pack(anchor=W)
 
         currentPageLabel = Label(currentPageFrame, text='n/a', bg = '#0F151D', fg = '#C96C00')
         currentPageLabel.pack(side=TOP)
 
-        generalSettings = generalSettingsWindow(self, bg='#0F151D')
-        hotKeys = hotKeyWindow(self, bg='#0F151D')
+        generalSettings = generalSettingsWindow(self, bg='#0F151D', height=200, width=400)
+        generalSettings.pack_propagate(0)
+        hotKeys = hotKeyWindow(self, bg='#0F151D', height=200, width=400, highlightbackground="#C96C00", highlightthicknes=1)
+        hotKeys.pack_propagate(0)
 
         generalSettings.place(in_=container, x=0, y=0)
         hotKeys.place(in_=container, x=0, y=0)
