@@ -25,12 +25,43 @@ with open('./json_settings.json','r') as settingsfile:
 class hotKeyWindow(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self,*args,**kwargs)
-
+        #Top frame used because tkinter is the mega super uber gay
         hotKeyWindowFrame = Frame(self, bg = '#0F151D')
         hotKeyWindowFrame.pack(side=LEFT)
-
-        hotKeyLabelFrame = Frame(hotKeyWindowFrame, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=120)
-        hotKeyLabelFrame.pack(side=TOP, expand=False)
+        #Title fames
+        hotKeyLabelFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
+        hotKeyLabelFrame.pack(side=LEFT, expand=False)
+        startStopHotKeyLabel = Label(hotKeyLabelFrame, text='start/stop:', bg = '#0F151D', fg = '#C96C00', pady=3)
+        startStopHotKeyLabel.pack(anchor=W)
+        lcbHoKeyLabel = Label(hotKeyLabelFrame, text='toggle lcb:', bg = '#0F151D', fg = '#C96C00', pady=3)
+        lcbHoKeyLabel.pack(anchor=W)
+        mcbHotKeyLabel = Label(hotKeyLabelFrame, text='toggle mcb:', bg = '#0F151D', fg = '#C96C00', pady=3)
+        mcbHotKeyLabel.pack(anchor=W)
+        rcbHotKey = Label(hotKeyLabelFrame, text='toggle rcb:', bg = '#0F151D', fg = '#C96C00', pady=3)
+        rcbHotKey.pack(anchor=W)
+        #Frame supposed to show current hotkey
+        currentHotKeyFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
+        currentHotKeyFrame.pack(side=LEFT)
+        currentStartStopHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
+        currentStartStopHotKey.pack(anchor=W)
+        currentLcbHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
+        currentLcbHotKey.pack(anchor=W)
+        currentMcbHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
+        currentMcbHotKey.pack(anchor=W)
+        currentRcbHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
+        currentRcbHotKey.pack(anchor=W)
+        #Set/Cancel buttons
+        setCancelButtonFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
+        setCancelButtonFrame.pack(side=LEFT)
+        hotKeySetCancelButton = Button(setCancelButtonFrame, text = 'Change', command = cancel, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        hotKeySetCancelButton.pack(anchor=W)
+        lcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command = cancel, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        lcbSetCancelButton.pack(anchor=W)
+        mcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command = cancel, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        mcbSetCancelButton.pack(anchor=W)
+        rcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command = cancel, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        rcbSetCancelButton.pack(anchor=W)
+        #Reset 
 
 class generalSettingsWindow(Frame):
     def __init__(self, *args, **kwargs):
