@@ -9,8 +9,8 @@
         "rcbenabled": 0,
         "mcbenabled": 0,
         "cpspreviousval": 1,
-        "keyboardkeys": "",
-        "timeouttypes": 1
+        "keyboardKeys": "",
+        "timeoutTypes": 1
     },
     "settings": {
         "general": {
