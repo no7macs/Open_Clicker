@@ -60,38 +60,39 @@ def main(loadedjsonsettings):
         #if win32api.GetAsyncKeyState(ord(str(rcbhotkey.get()))) != 0: togglercb()
         if keyboard.is_pressed(rcbhotkey.get()): togglercb()
 
-    if starthotkeyentry.get() != '':
-        keyboard.add_hotkey(starthotkeyentry.get(), lambda: Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings))    
-    if stophotkeyentry.get() != '': 
-        keyboard.add_hotkey(stophotkeyentry.get(), lambda: Stop())
+    #if starthotkeyentry.get() != '':
+    #    keyboard.add_hotkey(starthotkeyentry.get(), lambda: toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings, currentStatus))    
+
     root.after(1, lambda: main(loadedjsonsettings))
 
-def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
-    print(str(cpsvalue))
-    root.focus_set()
-    if not len(process_list) >= 1:
-        global p
-        process_list.append(str(random.randint(0,999)))
-        p = multiprocessing.Process(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
-        process_list[len(process_list)-1] = p
-        print(p)
-        p.start()
-        save(loadedjsonsettings)
-    win32api.Sleep(100)
-    print('START')
-    #toaster.show_toast('Open_Clicker','Started', duration = 1, icon_path='./favicon.ico')
-    return
-
-def Stop():
-    root.focus_set()
-    if bool(process_list) == True:
-        p = process_list[len(process_list)-1]
-        p.terminate()
-        p.join()
-        del(process_list[len(process_list)-1])
-    print('STOP')
-    #toaster.show_toast('Open_Clicker','Stopped', duration = 5, icon_path='./favicon.ico')
-    return
+def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings, currentStatus):
+    print(currentStatus)
+    if currentStatus == False:
+        root.focus_set()
+        if not len(process_list) >= 1:
+            global p
+            process_list.append(str(random.randint(0,999)))
+            p = multiprocessing.Process(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
+            process_list[len(process_list)-1] = p
+            print(p)
+            p.start()
+            save(loadedjsonsettings)
+        win32api.Sleep(100)
+        print('START')
+        toggleButton.config(text='Stop')
+        currentStatus = True
+    elif currentStatus == True:
+        root.focus_set()
+        if bool(process_list) == True:
+            p = process_list[len(process_list)-1]
+            p.terminate()
+            p.join()
+            del(process_list[len(process_list)-1])
+        print('STOP')
+        toggleButton.config(text='Start')
+        currentStatus = False
+    win32api.Sleep(1000)
+    return(currentStatus)
 
 def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
@@ -106,8 +107,6 @@ def save(loadedjsonsettings):
         #loadedjsonsettings["saveState"]["mincpsval"] =     #later reference
         #loadedjsonsettings["saveState"]["maxcpsval"] = 
         loadedjsonsettings["saveState"]["cpspreviousval"] = cpsvalue.get()
-        loadedjsonsettings["saveState"]["Starthotkey"] = starthotkeyentry.get()
-        loadedjsonsettings["saveState"]["Stophotkey"] = stophotkeyentry.get()
 
         json.dump(loadedjsonsettings, settingsfile, indent = 4)
 
@@ -118,12 +117,12 @@ def initVars(loadedjsonsettings):
     cpsslider.config(from_ = int(loadedjsonsettings["saveState"]["mincpsval"]), to = int(loadedjsonsettings["saveState"]["maxcpsval"]))
     cpsslider.set(int(loadedjsonsettings["saveState"]["cpspreviousval"]))
 
-    originstarthotkey = loadedjsonsettings["saveState"]["Starthotkey"]
-    starthotkeyentry.delete(0,END)
-    starthotkeyentry.insert(0,originstarthotkey)
-    originstophotkey = loadedjsonsettings["saveState"]["Stophotkey"]
-    stophotkeyentry.delete(0,END)
-    stophotkeyentry.insert(0,originstophotkey)
+    #originstarthotkey = loadedjsonsettings["saveState"]["Starthotkey"]
+    #starthotkeyentry.delete(0,END)
+    #starthotkeyentry.insert(0,originstarthotkey)
+    #originstophotkey = loadedjsonsettings["saveState"]["Stophotkey"]
+    #stophotkeyentry.delete(0,END)
+    #stophotkeyentry.insert(0,originstophotkey)
 
     morkcheckbuttonvar.set(loadedjsonsettings["saveState"]["mouseorkeyboard"])
     changeclickmode()
@@ -221,16 +220,6 @@ if __name__ == '__main__':
     cbbuttonframe.pack(side = TOP)
 
     #Start and Stop Hotkey frames
-    classichotkeyframe = Frame(otherstuffframe, bg = '#0F151D')
-    classichotkeyframe.pack(anchor = W)
-    startandstopframe = Frame(classichotkeyframe, bg = '#0F151D')
-    startandstopframe.pack(side = LEFT)
-    hotkeyframe = Frame(classichotkeyframe, bg = '#0F151D')
-    hotkeyframe.pack(side = LEFT)
-    setandresethotkeyframe = Frame(classichotkeyframe, bg = '#0F151D')
-    setandresethotkeyframe.pack(side = LEFT)
-    restoredefaultframe = Frame(classichotkeyframe, bg = '#0F151D')
-    restoredefaultframe.pack(side = LEFT)
 
     cpsvalue = IntVar()
     cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
@@ -238,24 +227,9 @@ if __name__ == '__main__':
     cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["saveState"]["mincpsval"]), to = int(loadedjsonsettings["saveState"]["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
     cpsslider.pack(side = LEFT)
 
-    startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-    startbutton.pack(anchor = W)
-    stopbutton = Button(startandstopframe, text = 'Stop', command = lambda: Stop(), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-    stopbutton.pack(anchor = W)
-
-    starthotkeyframe = Frame(hotkeyframe, bg = '#0F151D')
-    starthotkeyframe.pack(anchor = W)
-    starthotkeytext = Label(starthotkeyframe, text = 'Start HotKey:', bg = '#0F151D', fg = '#C96C00')
-    starthotkeytext.pack(side = LEFT)
-    starthotkeyentry = Entry(starthotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
-    starthotkeyentry.pack(side = LEFT)
-
-    stophotkeyframe = Frame(hotkeyframe, bg = '#0F151D')
-    stophotkeyframe.pack(anchor = W)
-    stophoykeylabel = Label(stophotkeyframe, text = 'Stop HotKey:',bg = '#0F151D', fg = '#C96C00')
-    stophoykeylabel.pack(side = LEFT)
-    stophotkeyentry = Entry(stophotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
-    stophotkeyentry.pack(side = LEFT)
+    currentStatus = bool(False)
+    toggleButton = Button(otherstuffframe, text = 'Start', command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings, currentStatus), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+    toggleButton.pack(anchor=W)
 
     #needs to fuck off later
     #sethotkeybutton = Button(setandresethotkeyframe, text = '  Set HotKey  ', command = lambda: sethotkey(loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
