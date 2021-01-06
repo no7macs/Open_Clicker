@@ -164,12 +164,6 @@ def togglercb():
     rcbcheckbox.toggle()
     win32api.Sleep(200)
 
-def changecpslimits():
-    win32api.Sleep(1000)
-    root.destroy()
-    win32api.Sleep(1000)
-    import changecpslimits
-
 def changeclickmode():
     if morkcheckbuttonvar.get() == 0:
         lcblabel.config(state='disabled')
@@ -247,8 +241,6 @@ if __name__ == '__main__':
     cpsvaluelabel.pack(side = TOP)
     cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["saveState"]["mincpsval"]), to = int(loadedjsonsettings["saveState"]["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
     cpsslider.pack(side = LEFT)
-    changecpssliderlimits = Button(cpsframe, text = 'Change cps slider limits', command = lambda: changecpslimits(), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-    changecpssliderlimits.pack(side = LEFT)
 
     startbutton = Button(startandstopframe, text = 'Start', command = lambda: Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     startbutton.pack(anchor = W)

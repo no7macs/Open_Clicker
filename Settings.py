@@ -9,15 +9,11 @@ def save(loadedjsonsettings, minValueEntry, maxValueEntry):
 
     with open('./json_settings.json','w') as settingsfile:
         json.dump(loadedjsonsettings, settingsfile, indent=4)
+        settingsfile.close()
 
     return
 
 def cancel(): 
-    return
-
-def initVars(loadedjsonsettings, runOnStartupVar, startMinimizedVar):
-    runOnStartupVar.set(loadedjsonsettings['settings']['runOnStartup'])
-    startMinimizedVar.set(loadedjsonsettings['settings']['startMinimize'])
     return
 
 #Super cool json file
@@ -30,9 +26,6 @@ class hotKeyWindow(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self,*args,**kwargs)
 
-        testLabel = Label(self, text='kekekekektestetstetst')
-        testLabel.pack(side=TOP)
-
 class generalSettingsWindow(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
@@ -44,12 +37,12 @@ class generalSettingsWindow(Frame):
         changeCPSLimitLabel.pack(side=TOP)
         minValueLabel = Label(changeCPSLimitFrame, text = 'Minimum Value (in milliseconds)', bg = '#0F151D', fg = '#C96C00')
         minValueLabel.pack(side=TOP)
-        minValueEntry = Entry(changeCPSLimitFrame, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
-        minValueEntry.pack(side=TOP)
+        self.minValueEntry = Entry(changeCPSLimitFrame, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
+        self.minValueEntry.pack(side=TOP)
         maxValueLabel = Label(changeCPSLimitFrame, text = 'Maximum Value (in milliseconds)', bg = '#0F151D', fg = '#C96C00')
         maxValueLabel.pack(side=TOP)
-        maxValueEntry = Entry(changeCPSLimitFrame, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
-        maxValueEntry.pack(side=TOP)
+        self.maxValueEntry = Entry(changeCPSLimitFrame, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
+        self.maxValueEntry.pack(side=TOP)
 
         #Startup and running stuff
         runningStuffFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1)
@@ -66,15 +59,33 @@ class generalSettingsWindow(Frame):
         runWithElevatedPrivligesLabel = Label(runningTitlesFrame, text='run with elevated privliges: ', bg = '#0F151D', fg = '#C96C00')
         runWithElevatedPrivligesLabel.pack(anchor=E)
         #Checkboxes
-        runOnStartupVar = IntVar()
-        runOnStartupCheckbox = Checkbutton(runningInputsFrame, variable=runOnStartupVar, onvalue=True, offvalue=False, bg='#0F151D', fg='#C96C00', highlightbackground='#0F151D', highlightcolor='#1E1D1D', selectcolor='#0F151D', activebackground='#0F151D', activeforeground='#066D9F')
+        self.runOnStartupVar = IntVar()
+        runOnStartupCheckbox = Checkbutton(runningInputsFrame, variable=self.runOnStartupVar, onvalue=True, offvalue=False, bg='#0F151D', fg='#C96C00', highlightbackground='#0F151D', highlightcolor='#1E1D1D', selectcolor='#0F151D', activebackground='#0F151D', activeforeground='#066D9F')
         runOnStartupCheckbox.pack(anchor=W)
-        startMinimizedVar = IntVar()
-        startMinimizedCheckbox = Checkbutton(runningInputsFrame, variable=startMinimizedVar, onvalue=True, offvalue=False, bg='#0F151D', fg='#C96C00', highlightbackground='#0F151D', highlightcolor='#1E1D1D', selectcolor='#0F151D', activebackground='#0F151D', activeforeground='#066D9F')
+        self.startMinimizedVar = IntVar()
+        startMinimizedCheckbox = Checkbutton(runningInputsFrame, variable=self.startMinimizedVar, onvalue=True, offvalue=False, bg='#0F151D', fg='#C96C00', highlightbackground='#0F151D', highlightcolor='#1E1D1D', selectcolor='#0F151D', activebackground='#0F151D', activeforeground='#066D9F')
         startMinimizedCheckbox.pack(anchor=W)
-        runWithElevatedPrivligesVar = IntVar()
-        runWithElevatedPrivligesCheckbox = Checkbutton(runningInputsFrame, variable=runWithElevatedPrivligesVar, onvalue=True, offvalue=False, bg='#0F151D', fg='#C96C00', highlightbackground='#0F151D', highlightcolor='#1E1D1D', selectcolor='#0F151D', activebackground='#0F151D', activeforeground='#066D9F')
+        self.runWithElevatedPrivligesVar = IntVar()
+        runWithElevatedPrivligesCheckbox = Checkbutton(runningInputsFrame, variable=self.runWithElevatedPrivligesVar, onvalue=True, offvalue=False, bg='#0F151D', fg='#C96C00', highlightbackground='#0F151D', highlightcolor='#1E1D1D', selectcolor='#0F151D', activebackground='#0F151D', activeforeground='#066D9F')
         runWithElevatedPrivligesCheckbox.pack(anchor=W)
+        
+        self.runOnStartupVar.set(loadedjsonsettings['settings']['runOnStartup'])
+        self.startMinimizedVar.set(loadedjsonsettings['settings']['startMinimize'])
+        self.runWithElevatedPrivligesVar.set(loadedjsonsettings['settings']['runWithElevatedPrivliges'])
+        self.minValueEntry.delete(0,END)
+        self.minValueEntry.insert(0,loadedjsonsettings["saveState"]["mincpsval"])
+        self.maxValueEntry.delete(0,END)
+        self.maxValueEntry.insert(0,loadedjsonsettings["saveState"]["maxcpsval"])
+
+    def save(self):
+        loadedjsonsettings['settings']['runOnStartup'] = bool(self.runOnStartupVar.get)
+        loadedjsonsettings['settings']['startMinimize'] = bool(self.startMinimizedVar.get)
+        loadedjsonsettings['settings']['runWithElevatedPrivliges'] = bool(self.runWithElevatedPrivligesVar.get)
+        loadedjsonsettings['mincpsval'] = int(self.minValueEntry.get())
+        loadedjsonsettings['maxcpsval'] = int(self.maxValueEntry.get())
+        with open('./json_settings.json','w') as settingsfile:
+            json.dump(loadedjsonsettings, settingsfile, indent=4)
+            settingsfile.close()
 
 class mainView(Frame):
     def __init__(self, *args, **kwargs):

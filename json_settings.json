@@ -20,7 +20,8 @@
         "timeouttypes": 1
     },
     "settings": {
-        "runOnStartup": false,
-        "startMinimize": false
+        "runOnStartup": true,
+        "startMinimize": false,
+        "runWithElevatedPrivliges": false
     }
 }
