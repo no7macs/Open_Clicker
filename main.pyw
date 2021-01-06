@@ -50,18 +50,18 @@ def main(loadedjsonsettings):
     # morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
     # morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings
 
-    if loadedjsonsettings['settings']['lcbhotkey'] != '':
+    if loadedjsonsettings['settings']['hotKeys']['lcbhotkey'] != '':
         #if keyboard.is_pressed(lcbhotkey.get()): togglelcb()
-        if keyboard.is_pressed(loadedjsonsettings['settings']['lcbhotkey']): togglelcb()
-    if loadedjsonsettings['settings']['mcbhotkey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['lcbhotkey']): togglelcb()
+    if loadedjsonsettings['settings']['hotKeys']['mcbhotkey'] != '':
         #if win32api.GetAsyncKeyState(ord(str(mcbhotkey.get()))) != 0: togglemcb()
-        if keyboard.is_pressed(loadedjsonsettings['settings']['mcbhotkey']): togglemcb()
-    if loadedjsonsettings['settings']['rcbhotkey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['mcbhotkey']): togglemcb()
+    if loadedjsonsettings['settings']['hotKeys']['rcbhotkey'] != '':
         #if win32api.GetAsyncKeyState(ord(str(rcbhotkey.get()))) != 0: togglercb()
-        if keyboard.is_pressed(loadedjsonsettings['settings']['rcbhotkey']): togglercb()
+        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['rcbhotkey']): togglercb()
 
-    if loadedjsonsettings['settings']['toggleHotKey'] != '':
-        if keyboard.is_pressed(loadedjsonsettings['settings']['toggleHotKey']):
+    if loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['toggleHotKey']):
             toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings)
 
     root.after(1, lambda: main(loadedjsonsettings))
@@ -100,14 +100,9 @@ def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
         #Will be changed when setings is expanded
         loadedjsonsettings["saveState"]["mouseorkeyboard"] = morkcheckbuttonvar.get()
-        #loadedjsonsettings["saveState"]["lcbhotkey"] = lcbhotkey.get()
-        #loadedjsonsettings["saveState"]["mcbhotkey"] = mcbhotkey.get()
-        #loadedjsonsettings["saveState"]["rcbhotkey"] = rcbhotkey.get()
         loadedjsonsettings["saveState"]["lcbenabled"] = lcbbuttonvar.get()
         loadedjsonsettings["saveState"]["mcbenabled"] = mcbbuttonvar.get()
         loadedjsonsettings["saveState"]["rcbenabled"] = rcbbuttonvar.get()
-        #loadedjsonsettings["saveState"]["mincpsval"] =     #later reference
-        #loadedjsonsettings["saveState"]["maxcpsval"] = 
         loadedjsonsettings["saveState"]["cpspreviousval"] = cpsvalue.get()
 
         json.dump(loadedjsonsettings, settingsfile, indent = 4)
@@ -116,7 +111,7 @@ def save(loadedjsonsettings):
     return
 
 def initVars(loadedjsonsettings):
-    cpsslider.config(from_ = int(loadedjsonsettings["saveState"]["mincpsval"]), to = int(loadedjsonsettings["saveState"]["maxcpsval"]))
+    cpsslider.config(from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]))
     cpsslider.set(int(loadedjsonsettings["saveState"]["cpspreviousval"]))
     
     morkcheckbuttonvar.set(loadedjsonsettings["saveState"]["mouseorkeyboard"])
@@ -194,7 +189,7 @@ if __name__ == '__main__':
     cpsvalue = IntVar()
     cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
     cpsvaluelabel.pack(side = TOP)
-    cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["saveState"]["mincpsval"]), to = int(loadedjsonsettings["saveState"]["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
+    cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
     cpsslider.pack(side = LEFT)
 
     toggleButton = Button(otherstuffframe, text = 'Start', command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=70)

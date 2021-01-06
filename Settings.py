@@ -1,18 +1,6 @@
 from tkinter import *
 import json, gc, webbrowser
 
-def save(loadedjsonsettings, minValueEntry, maxValueEntry):
-    loadedjsonsettings['settings']['runOnStartup'] = bool()
-    loadedjsonsettings['settings']['startMinimize'] = bool()
-    loadedjsonsettings['mincpsval'] = int(minValueEntry.get())
-    loadedjsonsettings['maxcpsval'] = int(maxValueEntry.get())
-
-    with open('./json_settings.json','w') as settingsfile:
-        json.dump(loadedjsonsettings, settingsfile, indent=4)
-        settingsfile.close()
-
-    return
-
 def cancel(): 
     return
 
@@ -83,7 +71,6 @@ class generalSettingsWindow(Frame):
         maxValueLabel.pack(side=TOP)
         self.maxValueEntry = Entry(changeCPSLimitFrame, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
         self.maxValueEntry.pack(side=TOP)
-
         #Startup and running stuff
         runningStuffFrame = Frame(generalSettingsWindowFrame, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=75)
         runningStuffFrame.pack(side=TOP, expand=False)
@@ -109,24 +96,25 @@ class generalSettingsWindow(Frame):
         self.runWithElevatedPrivligesVar = IntVar()
         runWithElevatedPrivligesCheckbox = Checkbutton(runningInputsFrame, variable=self.runWithElevatedPrivligesVar, onvalue=True, offvalue=False, bg='#0F151D', fg='#C96C00', highlightbackground='#0F151D', highlightcolor='#1E1D1D', selectcolor='#0F151D', activebackground='#0F151D', activeforeground='#066D9F')
         runWithElevatedPrivligesCheckbox.pack(anchor=W)
-        
-        self.runOnStartupVar.set(loadedjsonsettings['settings']['runOnStartup'])
-        self.startMinimizedVar.set(loadedjsonsettings['settings']['startMinimize'])
-        self.runWithElevatedPrivligesVar.set(loadedjsonsettings['settings']['runWithElevatedPrivliges'])
+        #Insert saves 
+        self.runOnStartupVar.set(loadedjsonsettings['settings']['general']['runOnStartup'])
+        self.startMinimizedVar.set(loadedjsonsettings['settings']['general']['startMinimize'])
+        self.runWithElevatedPrivligesVar.set(loadedjsonsettings['settings']['general']['runWithElevatedPrivliges'])
         self.minValueEntry.delete(0,END)
-        self.minValueEntry.insert(0,loadedjsonsettings["saveState"]["mincpsval"])
+        self.minValueEntry.insert(0,loadedjsonsettings["settings"]['general']["mincpsval"])
         self.maxValueEntry.delete(0,END)
-        self.maxValueEntry.insert(0,loadedjsonsettings["saveState"]["maxcpsval"])
+        self.maxValueEntry.insert(0,loadedjsonsettings["settings"]['general']["maxcpsval"])
 
     def save(self):
-        loadedjsonsettings['settings']['runOnStartup'] = bool(self.runOnStartupVar.get)
-        loadedjsonsettings['settings']['startMinimize'] = bool(self.startMinimizedVar.get)
-        loadedjsonsettings['settings']['runWithElevatedPrivliges'] = bool(self.runWithElevatedPrivligesVar.get)
-        loadedjsonsettings['mincpsval'] = int(self.minValueEntry.get())
-        loadedjsonsettings['maxcpsval'] = int(self.maxValueEntry.get())
+        loadedjsonsettings['settings']['general']['runOnStartup'] = bool(self.runOnStartupVar.get())
+        loadedjsonsettings['settings']['general']['startMinimize'] = bool(self.startMinimizedVar.get())
+        loadedjsonsettings['settings']['general']['runWithElevatedPrivliges'] = bool(self.runWithElevatedPrivligesVar.get())
+        loadedjsonsettings['settings']['general']['mincpsval'] = int(self.minValueEntry.get())
+        loadedjsonsettings['settings']['general']['maxcpsval'] = int(self.maxValueEntry.get())
         with open('./json_settings.json','w') as settingsfile:
             json.dump(loadedjsonsettings, settingsfile, indent=4)
             settingsfile.close()
+        return
 
 class mainView(Frame):
     def __init__(self, *args, **kwargs):
@@ -141,6 +129,9 @@ class mainView(Frame):
         currentPageFrame.pack(side=TOP)
         container = Frame(afterButtonsFrame, bg = '#0F151D')
         container.pack(anchor=W)
+        settingOptionsFrame = Frame(afterButtonsFrame, bg = '#0F151D', width=500, height=28)
+        settingOptionsFrame.pack(side=BOTTOM)
+        settingOptionsFrame.pack_propagate(0)
 
         currentPageLabel = Label(currentPageFrame, text='n/a', bg = '#0F151D', fg = '#C96C00')
         currentPageLabel.pack(side=TOP)
@@ -165,11 +156,18 @@ class mainView(Frame):
         scriptBotLogo = Button(buttons, justify=LEFT, command=lambda:webbrowser.open('https://script-bot.netlify.com'), image=scriptBotPhoto, bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         scriptBotLogo.image = scriptBotPhoto
         scriptBotLogo.pack(side=TOP)
-
         version = Label(buttons, text = 'Ver ' + loadedjsonsettings['about']['version'], bg='#0F151D', fg='#C96C00')
         version.pack(side=TOP)
 
+        doneButton = Button(settingOptionsFrame, text='Done', bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        doneButton.pack(side=RIGHT)
+        applyButton = Button(settingOptionsFrame, text='Apply', command=lambda:self.apply(generalSettings), bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        applyButton.pack(side=RIGHT)
+
         self.change(currentPageLabel, 'General', generalSettings)
+
+    def apply(self, generalSettings):
+        generalSettings.save()
 
     def change(self, currentPageLabel, displayName, className):
         currentPageLabel.config(text=displayName)
