@@ -61,20 +61,14 @@ def main(loadedjsonsettings):
         if keyboard.is_pressed(rcbhotkey.get()): togglercb()
 
     if starthotkeyentry.get() != '':
-        if keyboard.is_pressed(starthotkeyentry.get()): 
-            root.focus_set()
-            #morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
-            Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings)
-            #toaster.show_toast('Open_Clicker','Started', duration = 2, icon_path='./favicon.ico')
+        keyboard.add_hotkey(starthotkeyentry.get(), lambda: Start(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings))    
     if stophotkeyentry.get() != '': 
-        if keyboard.is_pressed(stophotkeyentry.get()): 
-            root.focus_set()
-            Stop()
-            win32api.Sleep(1000)
+        keyboard.add_hotkey(stophotkeyentry.get(), lambda: Stop())
     root.after(1, lambda: main(loadedjsonsettings))
 
 def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
     print(str(cpsvalue))
+    root.focus_set()
     if not len(process_list) >= 1:
         global p
         process_list.append(str(random.randint(0,999)))
@@ -89,6 +83,7 @@ def Start(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboard
     return
 
 def Stop():
+    root.focus_set()
     if bool(process_list) == True:
         p = process_list[len(process_list)-1]
         p.terminate()
@@ -131,6 +126,7 @@ def initVars(loadedjsonsettings):
     stophotkeyentry.insert(0,originstophotkey)
 
     morkcheckbuttonvar.set(loadedjsonsettings["saveState"]["mouseorkeyboard"])
+    changeclickmode()
 
     lcbbuttonvar.set(loadedjsonsettings["saveState"]["lcbenabled"])
     mcbbuttonvar.set(loadedjsonsettings["saveState"]["mcbenabled"])

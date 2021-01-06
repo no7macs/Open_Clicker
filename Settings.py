@@ -31,8 +31,9 @@ class generalSettingsWindow(Frame):
         Frame.__init__(self, *args, **kwargs)
 
         #Change cps limits
-        changeCPSLimitFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1)
-        changeCPSLimitFrame.pack(side=TOP)
+        changeCPSLimitFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=120)
+        changeCPSLimitFrame.pack(side=TOP, expand=False)
+        changeCPSLimitFrame.pack_propagate(0)
         changeCPSLimitLabel = Label(changeCPSLimitFrame, text='change CPS slider limits', bg = '#0F151D', fg = '#C96C00')
         changeCPSLimitLabel.pack(side=TOP)
         minValueLabel = Label(changeCPSLimitFrame, text = 'Minimum Value (in milliseconds)', bg = '#0F151D', fg = '#C96C00')
@@ -45,8 +46,9 @@ class generalSettingsWindow(Frame):
         self.maxValueEntry.pack(side=TOP)
 
         #Startup and running stuff
-        runningStuffFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1)
-        runningStuffFrame.pack(side=TOP)
+        runningStuffFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1, width=190, height=75)
+        runningStuffFrame.pack(side=TOP, expand=False)
+        runningStuffFrame.pack_propagate(0)
         runningTitlesFrame = Frame(runningStuffFrame, bg='#0F151D')
         runningTitlesFrame.pack(side=LEFT)
         runningInputsFrame = Frame(runningStuffFrame, bg='#0F151D')
@@ -90,13 +92,15 @@ class generalSettingsWindow(Frame):
 class mainView(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
-        buttons = Frame(self, bg = '#0F151D')
+        buttons = Frame(self, bg = '#0F151D', height=250, width=60)
         buttons.pack(side=LEFT)
-        afterButtonsFrame = Frame(self, bg = '#0F151D')
+        buttons.pack_propagate(0)
+        afterButtonsFrame = Frame(self, bg='#0F151D', height=250, width=500)
         afterButtonsFrame.pack(side=LEFT)
+        afterButtonsFrame.pack_propagate(0)
         currentPageFrame = Frame(afterButtonsFrame, bg = '#0F151D')
         currentPageFrame.pack(side=TOP)
-        container = Frame(afterButtonsFrame, bg = '#0F151D', width=200, height=200)
+        container = Frame(afterButtonsFrame, bg = '#0F151D')
         container.pack(side=TOP)
 
         currentPageLabel = Label(currentPageFrame, text='n/a', bg = '#0F151D', fg = '#C96C00')
@@ -125,23 +129,14 @@ class mainView(Frame):
         className.lift()
         return
 
-    def all_children(self, window) :
-        _list = window.winfo_children()
-
-        for item in _list :
-            if item.winfo_children() :
-                _list.extend(item.winfo_children())
-
-        return _list
-
 if __name__ == "__main__":
 
     root = Tk()
 
     root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings')
     root.config(bg = '#0F151D')
-    #root.resizable(0,0)
-    #root.geometry('500x500')
+    root.resizable(0,0)
+    root.geometry('500x250')
     root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='./favicon.png'))
 
     main = mainView(root, bg='#0F151D')
