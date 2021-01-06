@@ -60,14 +60,16 @@ def main(loadedjsonsettings):
         #if win32api.GetAsyncKeyState(ord(str(rcbhotkey.get()))) != 0: togglercb()
         if keyboard.is_pressed(rcbhotkey.get()): togglercb()
 
-    #if starthotkeyentry.get() != '':
-    #    keyboard.add_hotkey(starthotkeyentry.get(), lambda: toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings, currentStatus))    
+    if loadedjsonsettings['saveState']['toggleHotKey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['saveState']['toggleHotKey']):
+            toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings)
 
     root.after(1, lambda: main(loadedjsonsettings))
 
-def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings, currentStatus):
-    print(currentStatus)
-    if currentStatus == False:
+def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
+    try: toggle.currentStatus
+    except: toggle.currentStatus = bool()
+    if toggle.currentStatus == False:
         root.focus_set()
         if not len(process_list) >= 1:
             global p
@@ -80,8 +82,8 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
         win32api.Sleep(100)
         print('START')
         toggleButton.config(text='Stop')
-        currentStatus = True
-    elif currentStatus == True:
+        toggle.currentStatus = True
+    elif toggle.currentStatus == True:
         root.focus_set()
         if bool(process_list) == True:
             p = process_list[len(process_list)-1]
@@ -90,9 +92,9 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
             del(process_list[len(process_list)-1])
         print('STOP')
         toggleButton.config(text='Start')
-        currentStatus = False
+        toggle.currentStatus = False
+    else: toggle.currentStatus = False
     win32api.Sleep(1000)
-    return(currentStatus)
 
 def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
@@ -227,10 +229,8 @@ if __name__ == '__main__':
     cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["saveState"]["mincpsval"]), to = int(loadedjsonsettings["saveState"]["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
     cpsslider.pack(side = LEFT)
 
-    currentStatus = bool(False)
-    toggleButton = Button(otherstuffframe, text = 'Start', command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings, currentStatus), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+    toggleButton = Button(otherstuffframe, text = 'Start', command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=70)
     toggleButton.pack(anchor=W)
-
     #needs to fuck off later
     #sethotkeybutton = Button(setandresethotkeyframe, text = '  Set HotKey  ', command = lambda: sethotkey(loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     #sethotkeybutton.pack(anchor = W)

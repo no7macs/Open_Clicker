@@ -13,9 +13,8 @@
         "mcbhotkey": "",
         "mincpsval": "1",
         "maxcpsval": "1000",
-        "cpspreviousval": 1000,
-        "Starthotkey": "q+shift",
-        "Stophotkey": "w",
+        "cpspreviousval": 1,
+        "toggleHotKey": "q+shift",
         "keyboardkeys": "",
         "timeouttypes": 1
     },
