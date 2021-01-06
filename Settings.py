@@ -1,5 +1,5 @@
 from tkinter import *
-import json, gc
+import json, gc, webbrowser
 
 def save(loadedjsonsettings, minValueEntry, maxValueEntry):
     loadedjsonsettings['settings']['runOnStartup'] = bool()
@@ -26,7 +26,7 @@ class hotKeyWindow(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self,*args,**kwargs)
         #Top frame used because tkinter is the mega super uber gay
-        hotKeyWindowFrame = Frame(self, bg = '#0F151D')
+        hotKeyWindowFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1)
         hotKeyWindowFrame.pack(side=LEFT)
         #Title fames
         hotKeyLabelFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
@@ -147,7 +147,7 @@ class mainView(Frame):
 
         generalSettings = generalSettingsWindow(self, bg='#0F151D', height=200, width=400)
         generalSettings.pack_propagate(0)
-        hotKeys = hotKeyWindow(self, bg='#0F151D', height=200, width=400, highlightbackground="#C96C00", highlightthicknes=1)
+        hotKeys = hotKeyWindow(self, bg='#0F151D', height=200, width=400)
         hotKeys.pack_propagate(0)
 
         generalSettings.place(in_=container, x=0, y=0)
@@ -161,6 +161,13 @@ class mainView(Frame):
         hotKeysButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'HotKeys',hotKeys), image=hotKeyButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         hotKeysButton.image = hotKeyButtonPhoto
         hotKeysButton.pack(side=TOP)
+        scriptBotPhoto=PhotoImage(file="logo.png")
+        scriptBotLogo = Button(buttons, justify=LEFT, command=lambda:webbrowser.open('https://script-bot.netlify.com'), image=scriptBotPhoto, bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        scriptBotLogo.image = scriptBotPhoto
+        scriptBotLogo.pack(side=TOP)
+
+        version = Label(buttons, text = 'Ver ' + loadedjsonsettings['about']['version'], bg='#0F151D', fg='#C96C00')
+        version.pack(side=TOP)
 
         self.change(currentPageLabel, 'General', generalSettings)
 

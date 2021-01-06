@@ -1,6 +1,6 @@
 from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage
 #from tkinter import *
-import webbrowser, keyboard, json
+import keyboard, json
 import win32api, win32con
 import multiprocessing, random
 #from win10toast import ToastNotifier
@@ -50,18 +50,18 @@ def main(loadedjsonsettings):
     # morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings
     # morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings
 
-    if lcbhotkey.get() != '':
+    if loadedjsonsettings['settings']['lcbhotkey'] != '':
         #if keyboard.is_pressed(lcbhotkey.get()): togglelcb()
-        if keyboard.is_pressed(lcbhotkey.get()): togglelcb()
-    if mcbhotkey.get() != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['lcbhotkey']): togglelcb()
+    if loadedjsonsettings['settings']['mcbhotkey'] != '':
         #if win32api.GetAsyncKeyState(ord(str(mcbhotkey.get()))) != 0: togglemcb()
-        if keyboard.is_pressed(mcbhotkey.get()): togglemcb()
-    if rcbhotkey.get() != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['mcbhotkey']): togglemcb()
+    if loadedjsonsettings['settings']['rcbhotkey'] != '':
         #if win32api.GetAsyncKeyState(ord(str(rcbhotkey.get()))) != 0: togglercb()
-        if keyboard.is_pressed(rcbhotkey.get()): togglercb()
+        if keyboard.is_pressed(loadedjsonsettings['settings']['rcbhotkey']): togglercb()
 
-    if loadedjsonsettings['saveState']['toggleHotKey'] != '':
-        if keyboard.is_pressed(loadedjsonsettings['saveState']['toggleHotKey']):
+    if loadedjsonsettings['settings']['toggleHotKey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['toggleHotKey']):
             toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings)
 
     root.after(1, lambda: main(loadedjsonsettings))
@@ -100,9 +100,9 @@ def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
         #Will be changed when setings is expanded
         loadedjsonsettings["saveState"]["mouseorkeyboard"] = morkcheckbuttonvar.get()
-        loadedjsonsettings["saveState"]["lcbhotkey"] = lcbhotkey.get()
-        loadedjsonsettings["saveState"]["mcbhotkey"] = mcbhotkey.get()
-        loadedjsonsettings["saveState"]["rcbhotkey"] = rcbhotkey.get()
+        #loadedjsonsettings["saveState"]["lcbhotkey"] = lcbhotkey.get()
+        #loadedjsonsettings["saveState"]["mcbhotkey"] = mcbhotkey.get()
+        #loadedjsonsettings["saveState"]["rcbhotkey"] = rcbhotkey.get()
         loadedjsonsettings["saveState"]["lcbenabled"] = lcbbuttonvar.get()
         loadedjsonsettings["saveState"]["mcbenabled"] = mcbbuttonvar.get()
         loadedjsonsettings["saveState"]["rcbenabled"] = rcbbuttonvar.get()
@@ -118,14 +118,7 @@ def save(loadedjsonsettings):
 def initVars(loadedjsonsettings):
     cpsslider.config(from_ = int(loadedjsonsettings["saveState"]["mincpsval"]), to = int(loadedjsonsettings["saveState"]["maxcpsval"]))
     cpsslider.set(int(loadedjsonsettings["saveState"]["cpspreviousval"]))
-
-    #originstarthotkey = loadedjsonsettings["saveState"]["Starthotkey"]
-    #starthotkeyentry.delete(0,END)
-    #starthotkeyentry.insert(0,originstarthotkey)
-    #originstophotkey = loadedjsonsettings["saveState"]["Stophotkey"]
-    #stophotkeyentry.delete(0,END)
-    #stophotkeyentry.insert(0,originstophotkey)
-
+    
     morkcheckbuttonvar.set(loadedjsonsettings["saveState"]["mouseorkeyboard"])
     changeclickmode()
 
@@ -133,23 +126,10 @@ def initVars(loadedjsonsettings):
     mcbbuttonvar.set(loadedjsonsettings["saveState"]["mcbenabled"])
     rcbbuttonvar.set(loadedjsonsettings["saveState"]["rcbenabled"])
 
-    originlcbhotkey = loadedjsonsettings["saveState"]["lcbhotkey"]
-    lcbhotkey.delete(0,END)
-    lcbhotkey.insert(0,originlcbhotkey)
-    originmcbhotkey = loadedjsonsettings["saveState"]["mcbhotkey"]
-    mcbhotkey.delete(0,END)
-    mcbhotkey.insert(0,originmcbhotkey)
-    originrcbhotkey = loadedjsonsettings["saveState"]["rcbhotkey"]
-    rcbhotkey.delete(0,END)
-    rcbhotkey.insert(0,originrcbhotkey)
-
     originkeyboardentry = loadedjsonsettings["saveState"]["keyboardkeys"]
     keyboardentry.delete(0,END)
     keyboardentry.insert(0,originkeyboardentry)
     return
-
-def scriptbotlink():
-    webbrowser.open('https://script-bot.netlify.com')
 
 def togglelcb(): 
     lcbcheckbox.toggle()
@@ -169,12 +149,6 @@ def changeclickmode():
         lcbcheckbox.config(state='disabled')
         mcbcheckbox.config(state='disabled')
         rcbcheckbox.config(state='disabled')
-        lcbhotkeylabel.config(state='disabled')
-        mcbhotkeylabel.config(state='disabled')
-        rcbhotkeylabel.config(state='disabled')
-        lcbhotkey.config(state='disabled')
-        mcbhotkey.config(state='disabled')
-        rcbhotkey.config(state='disabled')
         keyboardlabel.config(state='normal')
         keyboardentry.config(state='normal')
     elif morkcheckbuttonvar.get() == 1:
@@ -184,12 +158,6 @@ def changeclickmode():
         lcbcheckbox.config(state='normal')
         mcbcheckbox.config(state='normal')
         rcbcheckbox.config(state='normal')
-        lcbhotkeylabel.config(state='normal')
-        mcbhotkeylabel.config(state='normal')
-        rcbhotkeylabel.config(state='normal')
-        lcbhotkey.config(state='normal')
-        mcbhotkey.config(state='normal')
-        rcbhotkey.config(state='normal')
         keyboardlabel.config(state='disabled')
         keyboardentry.config(state='disabled')
     else: print('YOU FUCKED IT UP YOU DUMBASS')
@@ -287,36 +255,12 @@ if __name__ == '__main__':
     rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     rcbcheckbox.pack(anchor = W)
 
-    lcbhotkeylabel = Label(buttonhotkeylabel, text = 'LCB Hotkey  ', bg = '#0F151D', fg = '#C96C00')
-    lcbhotkeylabel.pack(anchor = W)
-    mcbhotkeylabel = Label(buttonhotkeylabel, text = 'MCB Hotkey', bg = '#0F151D', fg = '#C96C00')
-    mcbhotkeylabel.pack(anchor = W)
-    rcbhotkeylabel = Label(buttonhotkeylabel, text = 'RCB Hotkey ', bg = '#0F151D', fg = '#C96C00')
-    rcbhotkeylabel.pack(anchor = W)
-
-    lcbhotkey = Entry(buttonhotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
-    lcbhotkey.pack(anchor = W)
-    mcbhotkey = Entry(buttonhotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
-    mcbhotkey.pack(anchor = W)
-    rcbhotkey = Entry(buttonhotkeyframe, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
-    rcbhotkey.pack(anchor = W)
-
     #Keyboard button stuff
     #keyboard setting frames
     keyboardlabel = Label(keyboardstuff, text = 'Keboard keys:', bg = '#0F151D', fg = '#C96C00')
     keyboardlabel.pack(side = LEFT)
     keyboardentry = Entry(keyboardstuff, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
     keyboardentry.pack(side = LEFT)
-
-    #keyboard stuff
-    #Version and link to de neat website
-    scriptbotlogo = Button(root,justify = LEFT, command = scriptbotlink, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-    scriptbotphoto=PhotoImage(file="logo.png")
-    scriptbotlogo.config(image=scriptbotphoto)
-    scriptbotlogo.pack(anchor = E)
-
-    version = Label(root, text = 'Version ' + loadedjsonsettings['about']['version'], bg = '#0F151D', fg = '#C96C00')
-    version.pack(anchor = E)
 
     #toaster = ToastNotifier()
 
