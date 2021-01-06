@@ -91,28 +91,37 @@ class mainView(Frame):
         currentPageLabel = Label(currentPageFrame, text='n/a', bg = '#0F151D', fg = '#C96C00')
         currentPageLabel.pack(side=TOP)
 
-        hotKeys = hotKeyWindow(self, bg='#0F151D')
         generalSettings = generalSettingsWindow(self, bg='#0F151D')
+        hotKeys = hotKeyWindow(self, bg='#0F151D')
 
-        hotKeys.place(in_=container, x=0, y=0)
         generalSettings.place(in_=container, x=0, y=0)
+        hotKeys.place(in_=container, x=0, y=0)
 
         generalButtonImage=PhotoImage(file="./icons/settings/general.png")
-        generalButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'General', generalSettingsWindow), image=generalButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        generalButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'General', generalSettings), image=generalButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         generalButton.image = generalButtonImage
         generalButton.pack(side=TOP)
         hotKeyButtonPhoto=PhotoImage(file="./icons/settings/hotkey.png")
-        hotKeysButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'HotKeys', hotKeyWindow), image=hotKeyButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        hotKeysButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'HotKeys',hotKeys), image=hotKeyButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         hotKeysButton.image = hotKeyButtonPhoto
         hotKeysButton.pack(side=TOP)
 
-        self.change(currentPageLabel, 'General', generalSettingsWindow)
+        self.change(currentPageLabel, 'General', generalSettings)
 
     def change(self, currentPageLabel, displayName, className):
         currentPageLabel.config(text=displayName)
         root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings ' + displayName)
-        className.lift(self)
+        className.lift()
         return
+
+    def all_children(self, window) :
+        _list = window.winfo_children()
+
+        for item in _list :
+            if item.winfo_children() :
+                _list.extend(item.winfo_children())
+
+        return _list
 
 if __name__ == "__main__":
 
