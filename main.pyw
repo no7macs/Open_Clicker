@@ -59,12 +59,12 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
             exec(b)
 
 def main(loadedjsonsettings):
-    if loadedjsonsettings['settings']['hotKeys']['lcbhotkey'] != '':
-        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['lcbhotkey']): togglelcb()
-    if loadedjsonsettings['settings']['hotKeys']['mcbhotkey'] != '':
-        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['mcbhotkey']): togglemcb()
-    if loadedjsonsettings['settings']['hotKeys']['rcbhotkey'] != '':
-        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['rcbhotkey']): togglercb()
+    if loadedjsonsettings['settings']['hotKeys']['lcbHotKey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['lcbHotKey']): togglelcb()
+    if loadedjsonsettings['settings']['hotKeys']['mcbHotKey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['mcbHotKey']): togglemcb()
+    if loadedjsonsettings['settings']['hotKeys']['rcbHotKey'] != '':
+        if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['rcbHotKey']): togglercb()
     if loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] != '':
         if keyboard.is_pressed(loadedjsonsettings['settings']['hotKeys']['toggleHotKey']):
             toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings)

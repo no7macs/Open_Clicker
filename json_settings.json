@@ -22,9 +22,9 @@
         },
         "hotKeys": {
             "toggleHotKey": "q+shift",
-            "lcbhotkey": "",
-            "rcbhotkey": "",
-            "mcbhotkey": ""
+            "lcbHotKey": "",
+            "rcbHotKey": "",
+            "mcbHotKey": ""
         }
     }
 }
