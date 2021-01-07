@@ -57,13 +57,13 @@ class hotKeyWindow(Frame):
         #Set/Cancel buttons
         setCancelButtonFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
         setCancelButtonFrame.pack(side=LEFT)
-        self.hotKeySetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(1), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        self.hotKeySetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(1), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
         self.hotKeySetCancelButton.pack(anchor=W)
-        self.lcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(2), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        self.lcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(2), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
         self.lcbSetCancelButton.pack(anchor=W)
-        self.mcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(3), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        self.mcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(3), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
         self.mcbSetCancelButton.pack(anchor=W)
-        self.rcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(4), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        self.rcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(4), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
         self.rcbSetCancelButton.pack(anchor=W)
         #Reset
         self.currentStartStopHotKey.config(text=loadedjsonsettings['settings']['hotKeys']['toggleHotKey'])
@@ -97,9 +97,7 @@ class hotKeyWindow(Frame):
                     (self.changeInfo[a]['button'])['state'] = DISABLED
                 else: 
                     (self.changeInfo[a]['button'])['state'] = NORMAL
-        p = multiprocessing.Process(target=self.grabInputs, name='grabInput')
-        p.start
-        p.join
+                    (self.changeInfo[a]['button']).config(text='Set', width=8)
 
 
     def save(self):
