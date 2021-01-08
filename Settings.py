@@ -57,7 +57,7 @@ class hotKeyWindow(Frame):
             self.widgetsInfo[a]['labels'][1] = Label(currentHotKeyFrame, text=self.widgetsInfo[a]['jsonData'], bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
             self.widgetsInfo[a]['labels'][1].pack(anchor=W)
             self.widgetsInfo[a]['buttons'][0] = self.initSetButton(a, self.widgetsInfo)
-            self.widgetsInfo[a]['buttons'][0] = self.widgetsInfo[a]['buttons'][0].create(cancelResetButtonFrame)
+            self.widgetsInfo[a]['buttons'][0], self.widgetsInfo = self.widgetsInfo[a]['buttons'][0].create(setChangeButtonFrame, text='Change', changeText='Set')
             self.widgetsInfo[a]['buttons'][0].pack(anchor=W)
             #self.widgetsInfo[a]['buttons'][1] = Button(cancelResetButtonFrame, text = 'Reset', command=lambda:self.change(a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
             #self.widgetsInfo[a]['buttons'][1].pack(anchor=W)
@@ -67,19 +67,22 @@ class hotKeyWindow(Frame):
             self.a = a
             self.widgetsInfo = widgetsInfo
             return
-        def create(self, frame):
-            b = Button(frame, text='Change', command=lambda:self.change(self.a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
-            return(b)
+        def create(self, frame, text='n/a', changeText='n/a'):
+            b = Button(frame, text=text, command=lambda:self.change(self.a, text=changeText), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
+            return(b, self.widgetsInfo)
 
-        def change(self, selected):
+        def change(self, selected, text='n/a'):
             #selectedInfo = self.changeInfo.get(selected)
             print(selected)
             for b in self.widgetsInfo:
-                if not self.widgetsInfo[b]['name'] == selected:
+                if self.widgetsInfo[b]['name'] != selected:
                     print(b)
                     (self.widgetsInfo[b]['buttons'][0])['state'] = DISABLED
                 else: 
-                    (self.widgetsInfo[b]['buttons'][0]).config(text='Set', width=8)
+                    if (self.widgetsInfo[b]['buttons'][0]).cget('text') != text: 
+                        (self.widgetsInfo[b]['buttons'][0]).config(text=text, width=8)
+                    else:
+                        print('I guess so')
 
     def grabInputs(self):
         print('running')
