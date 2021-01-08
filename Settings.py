@@ -32,53 +32,29 @@ class hotKeyWindow(Frame):
         #Top frame used because tkinter is the mega super uber gay
         hotKeyWindowFrame = Frame(self, bg = '#0F151D', highlightbackground="#C96C00", highlightthicknes=1)
         hotKeyWindowFrame.pack(side=LEFT)
-        #Title fames
+        #Other actually useful frames
         hotKeyLabelFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
         hotKeyLabelFrame.pack(side=LEFT, expand=False)
-        startStopHotKeyLabel = Label(hotKeyLabelFrame, text='start/stop:', bg = '#0F151D', fg = '#C96C00', pady=3)
-        startStopHotKeyLabel.pack(anchor=W)
-        lcbHoKeyLabel = Label(hotKeyLabelFrame, text='toggle lcb:', bg = '#0F151D', fg = '#C96C00', pady=3)
-        lcbHoKeyLabel.pack(anchor=W)
-        mcbHotKeyLabel = Label(hotKeyLabelFrame, text='toggle mcb:', bg = '#0F151D', fg = '#C96C00', pady=3)
-        mcbHotKeyLabel.pack(anchor=W)
-        rcbHotKey = Label(hotKeyLabelFrame, text='toggle rcb:', bg = '#0F151D', fg = '#C96C00', pady=3)
-        rcbHotKey.pack(anchor=W)
-        #Frame supposed to show current hotkey
         currentHotKeyFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
         currentHotKeyFrame.pack(side=LEFT)
-        self.currentStartStopHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
-        self.currentStartStopHotKey.pack(anchor=W)
-        self.currentLcbHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
-        self.currentLcbHotKey.pack(anchor=W)
-        self.currentMcbHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
-        self.currentMcbHotKey.pack(anchor=W)
-        self.currentRcbHotKey = Label(currentHotKeyFrame, text='n/a', bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
-        self.currentRcbHotKey.pack(anchor=W)
-        #Set/Cancel buttons
-        setCancelButtonFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
-        setCancelButtonFrame.pack(side=LEFT)
-        self.hotKeySetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(1), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
-        self.hotKeySetCancelButton.pack(anchor=W)
-        self.lcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(2), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
-        self.lcbSetCancelButton.pack(anchor=W)
-        self.mcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(3), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
-        self.mcbSetCancelButton.pack(anchor=W)
-        self.rcbSetCancelButton = Button(setCancelButtonFrame, text = 'Change', command=lambda:self.change(4), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
-        self.rcbSetCancelButton.pack(anchor=W)
-        #Reset
-        self.currentStartStopHotKey.config(text=loadedjsonsettings['settings']['hotKeys']['toggleHotKey'])
-        self.currentLcbHotKey.config(text=loadedjsonsettings['settings']['hotKeys']['lcbHotKey'])
-        self.currentMcbHotKey.config(text=loadedjsonsettings['settings']['hotKeys']['mcbHotKey'])
-        self.currentRcbHotKey.config(text=loadedjsonsettings['settings']['hotKeys']['rcbHotKey'])
+        setChangeButtonFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
+        setChangeButtonFrame.pack(side=LEFT)
 
         self.activeChange = int(0)
-        self.changeInfo = {
-                            0:{},
-                            1:{'label':self.currentStartStopHotKey,'button':self.hotKeySetCancelButton},
-                            2:{'label':self.currentLcbHotKey,'button':self.lcbSetCancelButton},
-                            3:{'label':self.currentMcbHotKey,'button': self.mcbSetCancelButton},
-                            4:{'label':self.currentRcbHotKey,'button':self.rcbSetCancelButton}
-                            }
+
+        self.widgetsInfo = {
+                        'toggleHotKey':{'displayName':'start/stop hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['toggleHotKey']},
+                        'lcbHotKey':{'displayName':'toggle lcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['lcbHotKey']},
+                        'mcbHotKey':{'displayName':'toggle mcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['mcbHotKey']},
+                        'rcbHotKey':{'displayName':'toggle rcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['rcbHotKey']}
+                        }  
+        for a in self.widgetsInfo:
+            self.widgetsInfo[a]['labels'][0] = Label(hotKeyLabelFrame, text=self.widgetsInfo[a]['displayName'], bg = '#0F151D', fg = '#C96C00', pady=3)
+            self.widgetsInfo[a]['labels'][0].pack(anchor=W)
+            self.widgetsInfo[a]['labels'][1] = Label(currentHotKeyFrame, text=self.widgetsInfo[a]['jsonData'], bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
+            self.widgetsInfo[a]['labels'][1].pack(anchor=W)
+            self.widgetsInfo[a]['buttons'][0] = Button(setChangeButtonFrame, text = 'Change', command=lambda:self.change(a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
+            self.widgetsInfo[a]['buttons'][0].pack(anchor=W)
 
     def grabInputs(self):
         print('running')
@@ -88,16 +64,14 @@ class hotKeyWindow(Frame):
                     print(b)
 
     def change(self, selected):
-        selectedInfo = self.changeInfo.get(selected)
+        #selectedInfo = self.changeInfo.get(selected)
 
-        for a in self.changeInfo:
-            if a != 0:
-                if a != selected:
-                    print(a)
-                    (self.changeInfo[a]['button'])['state'] = DISABLED
-                else: 
-                    (self.changeInfo[a]['button'])['state'] = NORMAL
-                    (self.changeInfo[a]['button']).config(text='Set', width=8)
+        for a in self.widgetsInfo:
+            if a != selected:
+                print(a)
+                (self.widgetsInfo[a]['buttons'][0])['state'] = DISABLED
+            else: 
+                (self.widgetsInfo[a]['buttons'][0]).config(text='Set', width=8)
 
 
     def save(self):
