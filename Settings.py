@@ -27,6 +27,7 @@ VK_CODE = {'backspace':0x08, 'tab':0x09, 'clear':0x0C, 'enter':0x0D, 'shift':0x1
     ';':0xBA, '[':0xDB, '\\':0xDC, ']':0xDD, "'":0xDE}
 
 class hotKeyWindow(Frame):
+
     def __init__(self, *args, **kwargs):
         Frame.__init__(self,*args,**kwargs)
         #Top frame used because tkinter is the mega super uber gay
@@ -45,20 +46,40 @@ class hotKeyWindow(Frame):
         self.activeChange = int(0)
 
         self.widgetsInfo = {
-                        'toggleHotKey':{'displayName':'start/stop hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['toggleHotKey']},
-                        'lcbHotKey':{'displayName':'toggle lcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['lcbHotKey']},
-                        'mcbHotKey':{'displayName':'toggle mcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['mcbHotKey']},
-                        'rcbHotKey':{'displayName':'toggle rcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['rcbHotKey']}
+                        'toggleHotKey':{'name':'toggleHotKey', 'displayName':'start/stop hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['toggleHotKey']},
+                        'lcbHotKey':{'name':'lcbHotKey', 'displayName':'toggle lcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['lcbHotKey']},
+                        'mcbHotKey':{'name':'mcbHotKey', 'displayName':'toggle mcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['mcbHotKey']},
+                        'rcbHotKey':{'name':'rcbHotKey', 'displayName':'toggle rcb hotkey:', 'labels':['',''], 'buttons':['',''], 'jsonData':loadedjsonsettings['settings']['hotKeys']['rcbHotKey']}
                         }  
         for a in self.widgetsInfo:
             self.widgetsInfo[a]['labels'][0] = Label(hotKeyLabelFrame, text=self.widgetsInfo[a]['displayName'], bg = '#0F151D', fg = '#C96C00', pady=3)
             self.widgetsInfo[a]['labels'][0].pack(anchor=W)
             self.widgetsInfo[a]['labels'][1] = Label(currentHotKeyFrame, text=self.widgetsInfo[a]['jsonData'], bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
             self.widgetsInfo[a]['labels'][1].pack(anchor=W)
-            self.widgetsInfo[a]['buttons'][0] = Button(setChangeButtonFrame, text = 'Change', command=lambda:self.change(a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
+            self.widgetsInfo[a]['buttons'][0] = self.initSetButton(a, self.widgetsInfo)
+            self.widgetsInfo[a]['buttons'][0] = self.widgetsInfo[a]['buttons'][0].create(cancelResetButtonFrame)
             self.widgetsInfo[a]['buttons'][0].pack(anchor=W)
-            self.widgetsInfo[a]['buttons'][1] = Button(cancelResetButtonFrame, text = 'Reset', command=lambda:self.change(a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
-            self.widgetsInfo[a]['buttons'][1].pack(anchor=W)
+            #self.widgetsInfo[a]['buttons'][1] = Button(cancelResetButtonFrame, text = 'Reset', command=lambda:self.change(a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
+            #self.widgetsInfo[a]['buttons'][1].pack(anchor=W)
+            
+    class initSetButton():
+        def __init__(self, a, widgetsInfo):
+            self.a = a
+            self.widgetsInfo = widgetsInfo
+            return
+        def create(self, frame):
+            b = Button(frame, text='Change', command=lambda:self.change(self.a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
+            return(b)
+
+        def change(self, selected):
+            #selectedInfo = self.changeInfo.get(selected)
+            print(selected)
+            for b in self.widgetsInfo:
+                if not self.widgetsInfo[b]['name'] == selected:
+                    print(b)
+                    (self.widgetsInfo[b]['buttons'][0])['state'] = DISABLED
+                else: 
+                    (self.widgetsInfo[b]['buttons'][0]).config(text='Set', width=8)
 
     def grabInputs(self):
         print('running')
@@ -66,17 +87,6 @@ class hotKeyWindow(Frame):
             for b in VK_CODE:
                 if keyboard.KEY_DOWN == b:
                     print(b)
-
-    def change(self, selected):
-        #selectedInfo = self.changeInfo.get(selected)
-        print(selected)
-        for a in self.widgetsInfo:
-            if a != selected:
-                print(a)
-                (self.widgetsInfo[a]['buttons'][0])['state'] = DISABLED
-            else: 
-                (self.widgetsInfo[a]['buttons'][0]).config(text='Set', width=8)
-
 
     def save(self):
         loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] = self.widgetsInfo['toggleHotKey']['jsonData']
