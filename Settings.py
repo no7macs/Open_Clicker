@@ -1,5 +1,5 @@
 from tkinter import *
-import json, webbrowser, keyboard, multiprocessing
+import json, webbrowser, keyboard, multiprocessing, win32api, win32con
 
 def cancel(): 
     return
@@ -24,7 +24,19 @@ VK_CODE = {'backspace':0x08, 'tab':0x09, 'clear':0x0C, 'enter':0x0D, 'shift':0x1
     'browser_favorites':0xAB, 'browser_start_and_home':0xAC, 'volume_mute':0xAD, 'volume_Down':0xAE, 'volume_up':0xAF, 'next_track':0xB0, 'previous_track':0xB1,
     'stop_media':0xB2, 'play/pause_media':0xB3, 'start_mail':0xB4, 'select_media':0xB5, 'start_application_1':0xB6, 'start_application_2':0xB7, 'attn_key':0xF6,
     'crsel_key':0xF7, 'exsel_key':0xF8, 'play_key':0xFA, 'zoom_key':0xFB, 'clear_key':0xFE, '+':0xBB, ',':0xBC, '-':0xBD, '.':0xBE, '/':0xBF, '`':0xC0,
-    ';':0xBA, '[':0xDB, '\\':0xDC, ']':0xDD, "'":0xDE}
+    ';':0xBA, '[':0xDB, '\\':0xDC, ']':0xDD, "'":0xDE,'xbutton1':0x05,'xbutton2':0x06}
+
+class keyListner():
+    def __init__(self):
+        self.charList = []
+        return
+    def listen(self):
+        while True:
+            for a in VK_CODE:
+                key = win32api.GetAsyncKeyState(VK_CODE[a])
+                if key != 0:
+                    if not a in self.charList:
+                        self.charList.append(a)
 
 class hotKeyWindow(Frame):
 
@@ -68,21 +80,25 @@ class hotKeyWindow(Frame):
             self.widgetsInfo = widgetsInfo
             return
         def create(self, frame, text='n/a', changeText='n/a'):
-            b = Button(frame, text=text, command=lambda:self.change(self.a, text=changeText), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
+            b = Button(frame, text=text, command=lambda:self.change(self.a, text=text, changedText=changeText), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
             return(b, self.widgetsInfo)
 
-        def change(self, selected, text='n/a'):
+        def change(self, selected, text='n/a', changedText='n/a'):
             #selectedInfo = self.changeInfo.get(selected)
+            listner = keyListner()
             print(selected)
             for b in self.widgetsInfo:
                 if self.widgetsInfo[b]['name'] != selected:
                     print(b)
                     (self.widgetsInfo[b]['buttons'][0])['state'] = DISABLED
                 else: 
-                    if (self.widgetsInfo[b]['buttons'][0]).cget('text') != text: 
-                        (self.widgetsInfo[b]['buttons'][0]).config(text=text, width=8)
+                    if (self.widgetsInfo[b]['buttons'][0]).cget('text') != changedText: 
+                        (self.widgetsInfo[b]['buttons'][0]).config(text=changedText, width=8)
+                        p = multiprocessing.Process(target=listner.listen)
+                        p.start()
+                        p.join()
                     else:
-                        print('I guess so')
+                        (self.widgetsInfo[b]['buttons'][0]).config(text=text, width=8)
 
     def grabInputs(self):
         print('running')
