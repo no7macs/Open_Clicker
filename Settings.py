@@ -39,6 +39,8 @@ class hotKeyWindow(Frame):
         currentHotKeyFrame.pack(side=LEFT)
         setChangeButtonFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
         setChangeButtonFrame.pack(side=LEFT)
+        cancelResetButtonFrame = Frame(hotKeyWindowFrame, bg = '#0F151D')
+        cancelResetButtonFrame.pack(side=LEFT)
 
         self.activeChange = int(0)
 
@@ -55,6 +57,8 @@ class hotKeyWindow(Frame):
             self.widgetsInfo[a]['labels'][1].pack(anchor=W)
             self.widgetsInfo[a]['buttons'][0] = Button(setChangeButtonFrame, text = 'Change', command=lambda:self.change(a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
             self.widgetsInfo[a]['buttons'][0].pack(anchor=W)
+            self.widgetsInfo[a]['buttons'][1] = Button(cancelResetButtonFrame, text = 'Reset', command=lambda:self.change(a), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=8)
+            self.widgetsInfo[a]['buttons'][1].pack(anchor=W)
 
     def grabInputs(self):
         print('running')
