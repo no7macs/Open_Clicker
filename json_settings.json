@@ -24,7 +24,8 @@
             "toggleHotKey": "q+shift",
             "lcbHotKey": "",
             "rcbHotKey": "",
-            "mcbHotKey": ""
+            "mcbHotKey": "",
+            "lcbHorKey": ""
         }
     }
 }

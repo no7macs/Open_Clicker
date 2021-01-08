@@ -65,7 +65,7 @@ class hotKeyWindow(Frame):
 
     def change(self, selected):
         #selectedInfo = self.changeInfo.get(selected)
-
+        print(selected)
         for a in self.widgetsInfo:
             if a != selected:
                 print(a)
@@ -75,10 +75,10 @@ class hotKeyWindow(Frame):
 
 
     def save(self):
-        loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] = self.currentStartStopHotKey.cget('text')
-        loadedjsonsettings['settings']['hotKeys']['lcbHorKey'] = self.currentLcbHotKey.cget('text')
-        loadedjsonsettings['settings']['hotKeys']['mcbHotKey'] = self.currentMcbHotKey.cget('text')
-        loadedjsonsettings['settings']['hotKeys']['rcbHotKey'] = self.currentRcbHotKey.cget('text')
+        loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] = self.widgetsInfo['toggleHotKey']['jsonData']
+        loadedjsonsettings['settings']['hotKeys']['lcbHorKey'] = self.widgetsInfo['lcbHotKey']['jsonData']
+        loadedjsonsettings['settings']['hotKeys']['mcbHotKey'] = self.widgetsInfo['mcbHotKey']['jsonData']
+        loadedjsonsettings['settings']['hotKeys']['rcbHotKey'] = self.widgetsInfo['rcbHotKey']['jsonData']
         return
 
 class generalSettingsWindow(Frame):
