@@ -5,7 +5,7 @@
     },
     "saveState": {
         "mouseorkeyboard": 1,
-        "lcbenabled": 1,
+        "lcbenabled": 0,
         "rcbenabled": 0,
         "mcbenabled": 0,
         "cpspreviousval": 415,
