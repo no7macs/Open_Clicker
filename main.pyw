@@ -2,7 +2,8 @@ from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Sc
 #from tkinter import *
 import keyboard, json
 import win32api, win32con
-import multiprocessing, random
+import win32com.shell.shell as shell
+import multiprocessing, random, winreg, sys, os
 #from win10toast import ToastNotifier
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
@@ -266,6 +267,29 @@ if __name__ == '__main__':
     changeclickmode()
 
     initVars(loadedjsonsettings)
+
+    key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)
+    is_checked = True
+    if (loadedjsonsettings['settings']['general']['runOnStartup']):
+        path = sys.executable
+        winreg.SetValueEx(key, 'CaptchaCatcher',0, winreg.REG_SZ, path)
+    else:
+        try:
+            winreg.DeleteValue(key, 'CaptchaCatcher')
+        except:
+            pass
+    key.Close()
+
+    if loadedjsonsettings['settings']['general']['startMinimize']:
+        root.wm_state('iconic')
+
+    if loadedjsonsettings['settings']['general']['runWithElevatedPrivliges']:
+        ASADMIN = 'asadmin'
+        if sys.argv[-1] != ASADMIN:
+            script = os.path.abspath(sys.argv[0])
+            params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
+            shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
+            sys.exit(0)
 
     root.after(1000,lambda: main(loadedjsonsettings))
     root.mainloop()

@@ -104,7 +104,6 @@ class hotKeyWindow(Frame):
                         (self.widgetsInfo[b]['buttons'][0])['state'] = NORMAL
                         (self.widgetsInfo[b]['buttons'][0]).config(text=text)
                 self.buttonToggle = False
-        
 
         charList = []
         def listen(self):
