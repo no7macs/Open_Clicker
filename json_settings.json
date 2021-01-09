@@ -8,7 +8,7 @@
         "lcbenabled": 1,
         "rcbenabled": 0,
         "mcbenabled": 0,
-        "cpspreviousval": 1,
+        "cpspreviousval": 415,
         "keyboardKeys": "",
         "timeoutTypes": 1
     },
@@ -21,7 +21,7 @@
             "maxcpsval": 1000
         },
         "hotKeys": {
-            "toggleHotKey": "q+shift",
+            "toggleHotKey": "q+left_shift",
             "lcbHotKey": "",
             "rcbHotKey": "",
             "mcbHotKey": "",

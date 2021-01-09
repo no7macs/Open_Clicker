@@ -27,8 +27,9 @@ VK_CODE = {'backspace':0x08, 'tab':0x09, 'clear':0x0C, 'enter':0x0D, 'shift':0x1
     ';':0xBA, '[':0xDB, '\\':0xDC, ']':0xDD, "'":0xDE,'xbutton1':0x05,'xbutton2':0x06}
 
 class keyListner():
-    def __init__(self):
+    def __init__(self, widgetsInfo):
         self.charList = []
+        self.widgetsInfo = widgetsInfo
         return
     def listen(self):
         while True:
@@ -37,6 +38,7 @@ class keyListner():
                 if key != 0:
                     if not a in self.charList:
                         self.charList.append(a)
+                        self.widgetsInfo['labels'][1].config(text=''.join(self.charList))
 
 class hotKeyWindow(Frame):
 
@@ -85,7 +87,7 @@ class hotKeyWindow(Frame):
 
         def change(self, selected, text='n/a', changedText='n/a'):
             #selectedInfo = self.changeInfo.get(selected)
-            listner = keyListner()
+            listner = keyListner(self.widgetsInfo[self.a])
             print(selected)
             for b in self.widgetsInfo:
                 if self.widgetsInfo[b]['name'] != selected:
@@ -96,7 +98,7 @@ class hotKeyWindow(Frame):
                         (self.widgetsInfo[b]['buttons'][0]).config(text=changedText, width=8)
                         p = multiprocessing.Process(target=listner.listen)
                         p.start()
-                        p.join()
+                        #p.join()
                     else:
                         (self.widgetsInfo[b]['buttons'][0]).config(text=text, width=8)
 
