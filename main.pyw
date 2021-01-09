@@ -191,6 +191,7 @@ def changeclickmode():
     return
 
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     #Super cool json file
     with open('./json_settings.json','r') as settingsfile:
         jsondata = settingsfile.read()

@@ -249,7 +249,8 @@ class mainView(Frame):
         sys.exit()
 
 def main():
-
+    multiprocessing.freeze_support()
+    
     global root
 
     root = Tk()
