@@ -4,7 +4,7 @@ import keyboard, json
 import win32api, win32con
 import win32com.shell.shell as shell
 import multiprocessing, random, winreg, sys, os
-import Settings
+import Settings, toolTip
 #from win10toast import ToastNotifier
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
@@ -143,8 +143,8 @@ def customExit(loadedjsonsettings):
     sys.exit()
 
 def initVars(loadedjsonsettings):
-    cpsslider.config(from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]))
-    cpsslider.set(int(loadedjsonsettings["saveState"]["cpspreviousval"]))
+    cpsSlider.config(from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]))
+    cpsSlider.set(int(loadedjsonsettings["saveState"]["cpspreviousval"]))
     
     morkcheckbuttonvar.set(loadedjsonsettings["saveState"]["mouseorkeyboard"])
     changeclickmode()
@@ -216,11 +216,13 @@ if __name__ == '__main__':
     cpsvalue = IntVar()
     cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
     cpsvaluelabel.pack(side = TOP)
-    cpsslider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
-    cpsslider.pack(side = LEFT)
+    cpsSlider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
+    cpsSlider.pack(side = LEFT)
+    cpsSliderTTP = toolTip.CreateToolTip(cpsSlider, 'Change the timeout between clicks (1 is fastest)')
     #Start/Stop button
     toggleButton = Button(otherstuffframe, text = 'Start', command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=70)
     toggleButton.pack(anchor=W)
+    toggleButtonTTP = toolTip.CreateToolTip(toggleButton, 'Start/Stop the clicking with a button')
     #thing for containing all the hotkey buttons and other neat stuff for keyboard
     #The overarchinge frame
     mouseandkeyboardsettingframe = Frame(cbbuttonframe, bg = '#0F151D')
