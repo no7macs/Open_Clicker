@@ -1,5 +1,6 @@
 from tkinter import *
 import json, webbrowser, keyboard, multiprocessing, win32api, win32con
+import toolTip
 
 def cancel(): 
     return
@@ -212,10 +213,12 @@ class mainView(Frame):
         generalButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'General', generalSettings), image=generalButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         generalButton.image = generalButtonImage
         generalButton.pack(side=TOP)
+        generalButtonTTP = toolTip.CreateToolTip(generalButton, 'General settings')
         hotKeyButtonPhoto=PhotoImage(file="./icons/settings/hotkey.png")
         hotKeysButton = Button(buttons, justify=LEFT, command=lambda:self.change(currentPageLabel, 'HotKeys',hotKeys), image=hotKeyButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         hotKeysButton.image = hotKeyButtonPhoto
         hotKeysButton.pack(side=TOP)
+        hotKeysButtonTTP = toolTip.CreateToolTip(hotKeysButton, 'HotKey settings')
         scriptBotPhoto=PhotoImage(file="logo.png")
         scriptBotLogo = Button(buttons, justify=LEFT, command=lambda:webbrowser.open('https://script-bot.netlify.com'), image=scriptBotPhoto, bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         scriptBotLogo.image = scriptBotPhoto
@@ -223,10 +226,12 @@ class mainView(Frame):
         version = Label(buttons, text = 'Ver ' + loadedjsonsettings['about']['version'], bg='#0F151D', fg='#C96C00')
         version.pack(side=TOP)
 
-        doneButton = Button(settingOptionsFrame, text='Done', bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        doneButton = Button(settingOptionsFrame, text='Done', command=self.done, bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         doneButton.pack(side=RIGHT)
+        doneButtonTTP = toolTip.CreateToolTip(doneButton, 'Exit settings')
         applyButton = Button(settingOptionsFrame, text='Apply', command=lambda:self.apply(generalSettings, hotKeys), bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         applyButton.pack(side=RIGHT)
+        applyButtonTTP = toolTip.CreateToolTip(applyButton, 'Save current settings')
 
         self.change(currentPageLabel, 'General', generalSettings)
 
@@ -240,7 +245,12 @@ class mainView(Frame):
         className.lift()
         return
 
-if __name__ == "__main__":
+    def done(self):
+        sys.exit()
+
+def main():
+
+    global root
 
     root = Tk()
 

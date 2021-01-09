@@ -4,6 +4,7 @@ import keyboard, json
 import win32api, win32con
 import win32com.shell.shell as shell
 import multiprocessing, random, winreg, sys, os
+import Settings
 #from win10toast import ToastNotifier
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
@@ -71,6 +72,8 @@ def main(loadedjsonsettings):
         if keypress == len(keys):
             call()
 
+    #root.protocol('WM_DELETE_WINDOW', customExit(loadedjsonsettings))  # root is your root window
+
     if loadedjsonsettings['settings']['hotKeys']['lcbHotKey'] != '':
         detect(call=lambda:togglelcb(),
                 keys=loadedjsonsettings['settings']['hotKeys']['lcbHotKey'])
@@ -130,6 +133,14 @@ def save(loadedjsonsettings):
 
     #initVars(loadedjsonsettings)
     return
+
+def settings():
+    p = multiprocessing.Process(target=Settings.main)
+    p.start()
+
+def customExit(loadedjsonsettings):
+    save(loadedjsonsettings)
+    sys.exit()
 
 def initVars(loadedjsonsettings):
     cpsslider.config(from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]))
@@ -263,6 +274,12 @@ if __name__ == '__main__':
     keyboardlabel.pack(side = LEFT)
     keyboardentry = Entry(keyboardstuff, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
     keyboardentry.pack(side = LEFT)
+    #Settings button stuff
+    settingsFrame = Frame(root, bg = '#0F151D')
+    settingsFrame.pack(side=TOP)
+    settingsButton = Button(settingsFrame, text='Settings', command=settings, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=70)
+    settingsButton.pack(side=RIGHT)
+
 
     changeclickmode()
 
