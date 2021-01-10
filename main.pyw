@@ -134,12 +134,12 @@ def save(loadedjsonsettings):
     return
 
 def settings():
-    #settingsstop = Toplevel()
-    #settings = Settings.mainView(settingsstop, bg='#0F151D')
-    #settings.pack(anchor=W)
-    p = multiprocessing.Process(target=Settings.main)
-    p.start()
-    p.join()
+    settingsstop = Toplevel()
+    settings = Settings.mainView(settingsstop, bg='#0F151D')
+    settings.pack(anchor=W)
+    #p = multiprocessing.Process(target=Settings.main)
+    #p.start()
+    #p.join()
 
     settingsstop.mainloop()
 

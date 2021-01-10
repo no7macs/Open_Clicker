@@ -183,6 +183,8 @@ class generalSettingsWindow(Frame):
 
 class mainView(Frame):
     def __init__(self, *args, **kwargs):
+        multiprocessing.freeze_support()
+
         Frame.__init__(self, *args, **kwargs)
         buttons = Frame(self, bg = '#0F151D', height=250, width=60)
         buttons.pack(side=LEFT)
@@ -248,8 +250,7 @@ class mainView(Frame):
     def done(self):
         sys.exit()
 
-def main():
-    multiprocessing.freeze_support()
+if __name__ == "__main__":
 
     global root
 
