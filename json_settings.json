@@ -1,7 +1,8 @@
 {
     "about": {
         "version": "5.0.0",
-        "displayVersion": "5"
+        "displayVersion": "5",
+        "date": "1/9/2021"
     },
     "saveState": {
         "mouseorkeyboard": 1,
@@ -15,8 +16,8 @@
     "settings": {
         "general": {
             "runOnStartup": false,
-            "startMinimize": true,
-            "runWithElevatedPrivliges": true,
+            "startMinimize": false,
+            "runWithElevatedPrivliges": false,
             "mincpsval": 1,
             "maxcpsval": 1000
         },

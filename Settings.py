@@ -1,6 +1,6 @@
 from tkinter import *
-import json, webbrowser, keyboard, multiprocessing, win32api, win32con
-import toolTip
+import json, keyboard, multiprocessing, win32api, win32con
+import toolTip, about
 
 def cancel(): 
     return
@@ -221,12 +221,11 @@ class mainView(Frame):
         hotKeysButton.image = hotKeyButtonPhoto
         hotKeysButton.pack(side=TOP)
         hotKeysButtonTTP = toolTip.CreateToolTip(hotKeysButton, 'HotKey settings')
-        scriptBotPhoto=PhotoImage(file="logo.png")
-        scriptBotLogo = Button(buttons, justify=LEFT, command=lambda:webbrowser.open('https://script-bot.netlify.com'), image=scriptBotPhoto, bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
-        scriptBotLogo.image = scriptBotPhoto
-        scriptBotLogo.pack(side=TOP)
-        version = Label(buttons, text = 'Ver ' + loadedjsonsettings['about']['version'], bg='#0F151D', fg='#C96C00')
-        version.pack(side=TOP)
+        aboutButtonPhoto=PhotoImage(file="./icons/settings/about.png")
+        aboutButton = Button(buttons, justify=LEFT, command=lambda:self.about(), image=aboutButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+        aboutButton.image = aboutButtonPhoto
+        aboutButton.pack(side=TOP)
+        aboutButtonTTP = toolTip.CreateToolTip(aboutButton, 'Program infopage')
 
         doneButton = Button(settingOptionsFrame, text='Done', command=self.done, bg='#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
         doneButton.pack(side=RIGHT)
@@ -243,8 +242,13 @@ class mainView(Frame):
 
     def change(self, currentPageLabel, displayName, className):
         currentPageLabel.config(text=displayName)
-        #root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings ' + displayName)
+        root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings ' + displayName)
         className.lift()
+        return
+
+    def about(self):
+        p = multiprocessing.Process(target=about.main)
+        p.start()
         return
 
     def done(self):
