@@ -241,7 +241,7 @@ class mainView(Frame):
 
     def change(self, currentPageLabel, displayName, className):
         currentPageLabel.config(text=displayName)
-        root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings ' + displayName)
+        #root.title('Open_Clicker ' + loadedjsonsettings['about']['displayVersion'] + ' Settings ' + displayName)
         className.lift()
         return
 
@@ -250,7 +250,7 @@ class mainView(Frame):
 
 def main():
     multiprocessing.freeze_support()
-    
+
     global root
 
     root = Tk()

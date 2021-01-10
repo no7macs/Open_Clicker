@@ -1,8 +1,7 @@
-from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage
+from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage, Toplevel
 #from tkinter import *
 import keyboard, json
 import win32api, win32con
-import win32com.shell.shell as shell
 import multiprocessing, random, winreg, sys, os
 import Settings, toolTip
 #from win10toast import ToastNotifier
@@ -135,8 +134,14 @@ def save(loadedjsonsettings):
     return
 
 def settings():
+    #settingsstop = Toplevel()
+    #settings = Settings.mainView(settingsstop, bg='#0F151D')
+    #settings.pack(anchor=W)
     p = multiprocessing.Process(target=Settings.main)
     p.start()
+    p.join()
+
+    settingsstop.mainloop()
 
 def customExit(loadedjsonsettings):
     save(loadedjsonsettings)
@@ -303,13 +308,13 @@ if __name__ == '__main__':
     if loadedjsonsettings['settings']['general']['startMinimize']:
         root.wm_state('iconic')
 
-    if loadedjsonsettings['settings']['general']['runWithElevatedPrivliges']:
-        ASADMIN = 'asadmin'
-        if sys.argv[-1] != ASADMIN:
-            script = os.path.abspath(sys.argv[0])
-            params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
-            shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
-            sys.exit(0)
+    #if loadedjsonsettings['settings']['general']['runWithElevatedPrivliges']:
+    #    ASADMIN = 'asadmin'
+    #    if sys.argv[-1] != ASADMIN:
+    #        script = os.path.abspath(sys.argv[0])
+    #        params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
+    #        shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
+    #        sys.exit(0)
 
     root.after(1000,lambda: main(loadedjsonsettings))
     root.mainloop()
