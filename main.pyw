@@ -4,6 +4,7 @@ import keyboard, json
 import win32api, win32con
 import multiprocessing, random, winreg, sys, os
 import Settings, toolTip
+import win32com.shell.shell as shell
 #from win10toast import ToastNotifier
 #from win32api import mouse_event, Sleep, keybd_event as win32api
 #from win32con import MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP as win32con
@@ -134,14 +135,12 @@ def save(loadedjsonsettings):
     return
 
 def settings():
-    settingsstop = Toplevel()
-    settings = Settings.mainView(settingsstop, bg='#0F151D')
-    settings.pack(anchor=W)
-    #p = multiprocessing.Process(target=Settings.main)
-    #p.start()
-    #p.join()
-
-    settingsstop.mainloop()
+    #settingsstop = Toplevel()
+    #settings = Settings.mainView(settingsstop, bg='#0F151D')
+    #settings.pack(anchor=W)
+    #settingsstop.mainloop()
+    p = multiprocessing.Process(target=Settings.main)
+    p.start()
 
 def customExit(loadedjsonsettings):
     save(loadedjsonsettings)
@@ -295,7 +294,7 @@ if __name__ == '__main__':
 
     key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)
     is_checked = True
-    if (loadedjsonsettings['settings']['general']['runOnStartup']):
+    if (loadedjsonsettings['settings']['general']['runOnStartup']) == True:
         path = sys.executable
         winreg.SetValueEx(key, 'CaptchaCatcher',0, winreg.REG_SZ, path)
     else:
@@ -305,16 +304,16 @@ if __name__ == '__main__':
             pass
     key.Close()
 
-    if loadedjsonsettings['settings']['general']['startMinimize']:
+    if loadedjsonsettings['settings']['general']['startMinimize'] == True:
         root.wm_state('iconic')
 
-    #if loadedjsonsettings['settings']['general']['runWithElevatedPrivliges']:
-    #    ASADMIN = 'asadmin'
-    #    if sys.argv[-1] != ASADMIN:
-    #        script = os.path.abspath(sys.argv[0])
-    #        params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
-    #        shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
-    #        sys.exit(0)
+    if loadedjsonsettings['settings']['general']['runWithElevatedPrivliges'] == True:
+        ASADMIN = 'asadmin'
+        if sys.argv[-1] != ASADMIN:
+            script = os.path.abspath(sys.argv[0])
+            params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
+            shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
+            sys.exit(0)
 
     root.after(1000,lambda: main(loadedjsonsettings))
     root.mainloop()

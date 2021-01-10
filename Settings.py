@@ -250,7 +250,7 @@ class mainView(Frame):
     def done(self):
         sys.exit()
 
-if __name__ == "__main__":
+def main():
 
     global root
 
