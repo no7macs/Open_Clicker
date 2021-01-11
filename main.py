@@ -35,13 +35,13 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
     x = int()
     y = int()
     if morkcheckbuttonvar == 1:
-        if lcbbuttonvar == 1:
+        if lcbbuttonvar:
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)', '<string>', 'exec'))
-        if mcbbuttonvar == 1:
+        if mcbbuttonvar:
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)', '<string>', 'exec'))
-        if rcbbuttonvar == 1:
+        if rcbbuttonvar:
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)', '<string>', 'exec'))
     if morkcheckbuttonvar == 0:
@@ -100,7 +100,8 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
             process_list.append(str(random.randint(0,999)))
             p = kthread.KThread(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
             process_list[len(process_list)-1] = p
-            print(p)
+            print(p)      
+            p.daemon = True
             p.start()
         win32api.Sleep(100)
         print('START')
@@ -270,11 +271,11 @@ if __name__ == '__main__':
     lcbbuttonvar = IntVar()
     mcbbuttonvar = IntVar()
     rcbbuttonvar = IntVar()
-    lcbcheckbox = Checkbutton(buttoncheckboxframe, variable = lcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
+    lcbcheckbox = Checkbutton(buttoncheckboxframe, variable = lcbbuttonvar, onvalue = True, offvalue = False, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     lcbcheckbox.pack(anchor = W)
-    mcbcheckbox = Checkbutton(buttoncheckboxframe, variable = mcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
+    mcbcheckbox = Checkbutton(buttoncheckboxframe, variable = mcbbuttonvar, onvalue = True, offvalue = False, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     mcbcheckbox.pack(anchor = W)
-    rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
+    rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = True, offvalue = False, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     rcbcheckbox.pack(anchor = W)
     #Keyboard button stuff
     #keyboard setting frames

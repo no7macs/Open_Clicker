@@ -2,7 +2,7 @@
     "about": {
         "version": "5.0.0",
         "displayVersion": "5",
-        "date": "1/9/2021"
+        "date": "1/11/2021"
     },
     "saveState": {
         "mouseorkeyboard": 1,
@@ -27,6 +27,11 @@
             "rcbHotKey": "",
             "mcbHotKey": "",
             "lcbHorKey": ""
+        },
+        "executions": {
+            "win": {},
+            "lin": {},
+            "mac": {}
         }
     }
 }
