@@ -39,7 +39,7 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)', '<string>', 'exec'))
         if mcbbuttonvar:
-            actionSet['before'].append(compilFlcbe('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)', '<string>', 'exec'))
+            actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)', '<string>', 'exec'))
         if rcbbuttonvar:
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)', '<string>', 'exec'))
@@ -61,17 +61,6 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
             exec(b)
 
 def main(loadedjsonsettings):
-    def detect(call, keys):
-        keys = keys.split('+')
-        keypress = 0
-        for a in range(0, len(keys)):
-            key = win32api.GetAsyncKeyState(VK_CODE[keys[a]])
-            if key != 0:
-                keypress += 1
-            else: keypress == 0
-        if keypress == len(keys):
-            call()
-        else: return()
 
     #root.protocol('WM_DELETE_WINDOW', customExit(loadedjsonsettings))  # root is your root window
 
@@ -85,8 +74,7 @@ def main(loadedjsonsettings):
         detect(call=lambda:togglercb(),
                 keys=loadedjsonsettings['settings']['hotKeys']['rcbHotKey'])
     if loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] != '':
-        detect(call=lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings),
-                keys=loadedjsonsettings['settings']['hotKeys']['toggleHotKey'])
+        pass
 
     root.after(1, lambda: main(loadedjsonsettings))
 
@@ -121,6 +109,17 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
     else: toggle.currentStatus = False
     win32api.Sleep(1000)
 
+def detect(call, keys):
+    keys = keys.split('+')
+    keypress = 0
+    for a in range(0, len(keys)):
+        key = win32api.GetAsyncKeyState(VK_CODE[keys[a]])
+        if key != 0:
+            keypress += 1
+        else: keypress == 0
+    if keypress == len(keys):
+        call()
+        
 def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
         #Will be changed when setings is expanded
