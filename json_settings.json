@@ -6,9 +6,9 @@
     },
     "saveState": {
         "mouseorkeyboard": 1,
-        "lcbenabled": 1,
-        "rcbenabled": 0,
-        "mcbenabled": 0,
+        "lcbenabled": true,
+        "rcbenabled": false,
+        "mcbenabled": false,
         "cpspreviousval": 1000,
         "keyboardKeys": "",
         "timeoutTypes": 1
@@ -22,14 +22,21 @@
             "maxcpsval": 1000
         },
         "hotKeys": {
-            "toggleHotKey": "xbutton2",
+            "toggleHotKey": "q+left_shift",
             "lcbHotKey": "",
             "rcbHotKey": "",
             "mcbHotKey": "",
             "lcbHorKey": ""
         },
         "executions": {
-            "win": {},
+            "nt": {
+                "lcb": ["win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)",
+                        "win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)"],
+                "mcb": ["win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)",
+                        "win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)"],
+                "rcb": ["win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)",
+                        "win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)"]
+            },
             "lin": {},
             "mac": {}
         }
