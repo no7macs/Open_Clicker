@@ -2,7 +2,7 @@ from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Sc
 #from tkinter import *
 import keyboard, json
 import win32api, win32con
-import multiprocessing, random, winreg, sys, os
+import multiprocessing, random, winreg, sys, os, kthread
 import Settings, toolTip
 import win32com.shell.shell as shell
 #from win10toast import ToastNotifier
@@ -71,6 +71,7 @@ def main(loadedjsonsettings):
             else: keypress == 0
         if keypress == len(keys):
             call()
+        else: return()
 
     #root.protocol('WM_DELETE_WINDOW', customExit(loadedjsonsettings))  # root is your root window
 
@@ -97,7 +98,7 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
         root.focus_set()
         if not len(process_list) >= 1:
             process_list.append(str(random.randint(0,999)))
-            p = multiprocessing.Process(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
+            p = kthread.KThread(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
             process_list[len(process_list)-1] = p
             print(p)
             p.start()

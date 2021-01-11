@@ -85,6 +85,7 @@ class hotKeyWindow(Frame):
         buttonToggle = False
         def change(self, selected, text='n/a', changedText='n/a'):
             #selectedInfo = self.changeInfo.get(selected)
+            self.charList = []
             p = multiprocessing.Process(target=self.listen())
             print(selected)
             if self.buttonToggle == False:

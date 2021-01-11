@@ -7,67 +7,67 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:export-ydpi="96"
-   inkscape:export-xdpi="96"
-   inkscape:export-filename="A:\Pictures\Vector Drawings\Open_Clciker-Icons\icons\settings\about.png"
-   sodipodi:docname="About.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   id="svg8"
-   version="1.1"
-   viewBox="0 0 13.229166 13.229167"
+   width="50"
    height="50"
-   width="50">
+   viewBox="0 0 13.229166 13.229167"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="about.svg"
+   inkscape:export-filename="A:\Pictures\InkScape\Open_Clciker-Icons\icons\settings\about.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <defs
      id="defs2">
     <marker
-       inkscape:isstock="true"
-       style="overflow:visible"
-       id="marker1109"
-       refX="0.0"
-       refY="0.0"
+       inkscape:stockid="Arrow1Lstart"
        orient="auto"
-       inkscape:stockid="Arrow1Lstart">
+       refY="0.0"
+       refX="0.0"
+       id="marker1109"
+       style="overflow:visible"
+       inkscape:isstock="true">
       <path
-         transform="scale(0.8) translate(12.5,0)"
-         style="fill-rule:evenodd;stroke:#066d9f;stroke-width:1pt;stroke-opacity:1;fill:#066d9f;fill-opacity:1"
+         id="path1107"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         id="path1107" />
+         style="fill-rule:evenodd;stroke:#066d9f;stroke-width:1pt;stroke-opacity:1;fill:#066d9f;fill-opacity:1"
+         transform="scale(0.8) translate(12.5,0)" />
     </marker>
     <marker
-       inkscape:isstock="true"
-       style="overflow:visible"
-       id="Arrow1Lstart"
-       refX="0.0"
-       refY="0.0"
+       inkscape:stockid="Arrow1Lstart"
        orient="auto"
-       inkscape:stockid="Arrow1Lstart">
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible"
+       inkscape:isstock="true">
       <path
-         transform="scale(0.8) translate(12.5,0)"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         id="path837"
          d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         id="path837" />
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         transform="scale(0.8) translate(12.5,0)" />
     </marker>
   </defs>
   <sodipodi:namedview
-     inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="-8"
-     inkscape:window-height="1017"
-     inkscape:window-width="1920"
-     units="px"
-     showgrid="false"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="layer1"
-     inkscape:document-units="px"
-     inkscape:cy="31.098888"
-     inkscape:cx="19.900846"
-     inkscape:zoom="7.9195959"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
-     borderopacity="1.0"
-     bordercolor="#666666"
+     id="base"
      pagecolor="#ffffff"
-     id="base" />
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6"
+     inkscape:cx="13.063977"
+     inkscape:cy="56.855423"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -76,41 +76,69 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1"
+     inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     inkscape:label="Layer 1">
+     id="layer1">
     <g
-       transform="translate(0.06198133,-0.06242156)"
-       id="g1169">
+       transform="translate(0.1295717,-0.20245382)"
+       id="g887">
       <g
-         id="g1149"
-         transform="translate(-0.23494682,0.23494654)">
-        <circle
-           r="3.1573458"
-           cy="4.502069"
-           cx="8.7812643"
-           id="path833"
-           style="fill:none;stroke:#066d9f;stroke-width:0.836877;stroke-miterlimit:4;stroke-dasharray:none" />
+         id="g880">
         <rect
-           transform="rotate(-45)"
-           y="9.2511978"
-           x="-6.5164299"
-           height="0.12986837"
-           width="6.1471033"
-           id="rect835"
-           style="fill:none;stroke:#066d9f;stroke-width:0.836877;stroke-miterlimit:4;stroke-dasharray:none" />
+           y="4.7129607"
+           x="5.6832027"
+           height="7.5754428"
+           width="1.6036172"
+           id="rect851"
+           style="fill:#066d9f;stroke-width:0.593551" />
+        <path
+           transform="matrix(0.02128209,0.28994518,-0.66036227,0.00934433,6.280442,4.1860722)"
+           inkscape:transform-center-y="0.19219884"
+           inkscape:transform-center-x="-0.0046524431"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="false"
+           sodipodi:arg2="1.08468"
+           sodipodi:arg1="0.037482437"
+           sodipodi:r2="1.3372869"
+           sodipodi:r1="2.6745739"
+           sodipodi:cy="-0.20045257"
+           sodipodi:cx="3.173826"
+           sodipodi:sides="3"
+           id="path853"
+           style="fill:#066d9f;stroke-width:0.836877"
+           sodipodi:type="star"
+           d="M 5.8465213,-0.10022649 3.7986006,0.98191498 1.75068,2.0640564 1.8374783,-0.25056562 1.9242766,-2.5651876 3.885399,-1.3327071 Z" />
+        <path
+           sodipodi:type="star"
+           style="fill:#066d9f;stroke-width:0.836877"
+           id="path855"
+           sodipodi:sides="3"
+           sodipodi:cx="3.173826"
+           sodipodi:cy="-0.20045257"
+           sodipodi:r1="2.6745739"
+           sodipodi:r2="1.3372869"
+           sodipodi:arg1="0.037482437"
+           sodipodi:arg2="1.08468"
+           inkscape:flatsided="false"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           inkscape:transform-center-x="-0.0046524431"
+           inkscape:transform-center-y="-0.19219881"
+           transform="matrix(0.02128209,-0.28994518,-0.66036227,-0.00934433,6.2804422,12.815292)"
+           d="M 5.8465213,-0.10022649 3.7986006,0.98191498 1.75068,2.0640564 1.8374783,-0.25056562 1.9242766,-2.5651876 3.885399,-1.3327071 Z" />
       </g>
       <circle
-         style="fill:#066d9f;fill-opacity:1;stroke:none;stroke-width:0.892209;stroke-miterlimit:4;stroke-dasharray:none"
-         id="path1151"
-         cx="1.4675541"
-         cy="11.708326"
-         r="0.48445201" />
+         style="fill:#066d9f;stroke-width:0.276395"
+         id="path862"
+         cx="6.4850111"
+         cy="2.4560134"
+         r="1.1103429" />
     </g>
   </g>
 </svg>
