@@ -1,6 +1,6 @@
 {
     "about": {
-        "version": "5.0.0",
+        "version": "5.0.1",
         "displayVersion": "5",
         "date": "1/11/2021"
     },
@@ -9,7 +9,7 @@
         "lcbenabled": 1,
         "rcbenabled": 0,
         "mcbenabled": 0,
-        "cpspreviousval": 1000,
+        "cpspreviousval": 990,
         "keyboardKeys": "",
         "timeoutTypes": 1
     },
@@ -22,10 +22,21 @@
             "maxcpsval": 1000
         },
         "hotKeys": {
-            "toggleHotKey": "q+left_shift",
-            "lcbHotKey": "",
-            "rcbHotKey": "",
-            "mcbHotKey": "",
+            "toggleHotKey": [
+                "xbutton1"
+            ],
+            "lcbHotKey": [
+                "a",
+                "right_control"
+            ],
+            "rcbHotKey": [
+                "d",
+                "right_control"
+            ],
+            "mcbHotKey": [
+                "s",
+                "right_control"
+            ],
             "lcbHorKey": ""
         },
         "executions": {

@@ -35,13 +35,13 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
     x = int()
     y = int()
     if morkcheckbuttonvar == 1:
-        if lcbbuttonvar:
+        if lcbbuttonvar == 1:
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)', '<string>', 'exec'))
-        if mcbbuttonvar:
+        if mcbbuttonvar == 1:
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)', '<string>', 'exec'))
-        if rcbbuttonvar:
+        if rcbbuttonvar == 1:
             actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)', '<string>', 'exec'))
     if morkcheckbuttonvar == 0:
@@ -60,10 +60,18 @@ def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboa
         for b in actionSet['after']:
             exec(b)
 
+def detect(call, keys):
+    keypress = 0
+    for a in range(0, len(keys)):
+        key = win32api.GetAsyncKeyState(VK_CODE[keys[a]])
+        if key != 0:
+            keypress += 1
+        else: keypress == 0
+    if keypress == len(keys):
+        call()
+
 def main(loadedjsonsettings):
-
     #root.protocol('WM_DELETE_WINDOW', customExit(loadedjsonsettings))  # root is your root window
-
     if loadedjsonsettings['settings']['hotKeys']['lcbHotKey'] != '':
         detect(call=lambda:togglelcb(),
                 keys=loadedjsonsettings['settings']['hotKeys']['lcbHotKey'])
@@ -74,7 +82,8 @@ def main(loadedjsonsettings):
         detect(call=lambda:togglercb(),
                 keys=loadedjsonsettings['settings']['hotKeys']['rcbHotKey'])
     if loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] != '':
-        pass
+        detect(call=lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings),
+                keys=loadedjsonsettings['settings']['hotKeys']['toggleHotKey'])
 
     root.after(1, lambda: main(loadedjsonsettings))
 
@@ -86,10 +95,9 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
         root.focus_set()
         if not len(process_list) >= 1:
             process_list.append(str(random.randint(0,999)))
-            p = multiprocessing.Process(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
+            p = kthread.KThread(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
             process_list[len(process_list)-1] = p
-            print(p)      
-            p.daemon = True
+            print(p)
             p.start()
         win32api.Sleep(100)
         print('START')
@@ -109,17 +117,6 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
     else: toggle.currentStatus = False
     win32api.Sleep(1000)
 
-def detect(call, keys):
-    keys = keys.split('+')
-    keypress = 0
-    for a in range(0, len(keys)):
-        key = win32api.GetAsyncKeyState(VK_CODE[keys[a]])
-        if key != 0:
-            keypress += 1
-        else: keypress == 0
-    if keypress == len(keys):
-        call()
-        
 def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
         #Will be changed when setings is expanded
@@ -141,7 +138,6 @@ def settings():
     #settings.pack(anchor=W)
     #settingsstop.mainloop()
     p = multiprocessing.Process(target=Settings.main)
-    p.daemon = True
     p.start()
 
 def customExit(loadedjsonsettings):
@@ -271,11 +267,11 @@ if __name__ == '__main__':
     lcbbuttonvar = IntVar()
     mcbbuttonvar = IntVar()
     rcbbuttonvar = IntVar()
-    lcbcheckbox = Checkbutton(buttoncheckboxframe, variable = lcbbuttonvar, onvalue = True, offvalue = False, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
+    lcbcheckbox = Checkbutton(buttoncheckboxframe, variable = lcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     lcbcheckbox.pack(anchor = W)
-    mcbcheckbox = Checkbutton(buttoncheckboxframe, variable = mcbbuttonvar, onvalue = True, offvalue = False, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
+    mcbcheckbox = Checkbutton(buttoncheckboxframe, variable = mcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     mcbcheckbox.pack(anchor = W)
-    rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = True, offvalue = False, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
+    rcbcheckbox = Checkbutton(buttoncheckboxframe, variable = rcbbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F')
     rcbcheckbox.pack(anchor = W)
     #Keyboard button stuff
     #keyboard setting frames
@@ -288,27 +284,25 @@ if __name__ == '__main__':
     settingsFrame.pack(side=TOP)
     settingsButton = Button(settingsFrame, text='Settings', command=settings, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=70)
     settingsButton.pack(side=RIGHT)
-
-
+    #startup function
     changeclickmode()
-
     initVars(loadedjsonsettings)
-
+    #run on startup
     key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)
     is_checked = True
     if (loadedjsonsettings['settings']['general']['runOnStartup']) == True:
         path = sys.executable
-        winreg.SetValueEx(key, 'CaptchaCatcher',0, winreg.REG_SZ, path)
+        winreg.SetValueEx(key, 'OpenClicker',0, winreg.REG_SZ, path)
     else:
         try:
-            winreg.DeleteValue(key, 'CaptchaCatcher')
+            winreg.DeleteValue(key, 'OpenClicker')
         except:
             pass
     key.Close()
-
+    #minimize
     if loadedjsonsettings['settings']['general']['startMinimize'] == True:
         root.wm_state('iconic')
-
+    #run as admin
     if loadedjsonsettings['settings']['general']['runWithElevatedPrivliges'] == True:
         ASADMIN = 'asadmin'
         if sys.argv[-1] != ASADMIN:

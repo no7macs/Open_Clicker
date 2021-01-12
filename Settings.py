@@ -66,7 +66,7 @@ class hotKeyWindow(Frame):
 
     def save(self):
         for a in self.widgetsInfo:
-            loadedjsonsettings['settings']['hotKeys'][self.widgetsInfo[a]['jsonData']] = (self.widgetsInfo[a]['labels'][1]).cget('text')  
+            loadedjsonsettings['settings']['hotKeys'][self.widgetsInfo[a]['jsonData']] = ((self.widgetsInfo[a]['labels'][1]).cget('text')).split('+')  
         with open('./json_settings.json','w') as settingsfile:
             json.dump(loadedjsonsettings, settingsfile, indent=4)
             settingsfile.close()
