@@ -56,7 +56,7 @@ class hotKeyWindow(Frame):
         for a in self.widgetsInfo:
             self.widgetsInfo[a]['labels'][0] = Label(hotKeyLabelFrame, text=self.widgetsInfo[a]['displayName'], bg = '#0F151D', fg = '#C96C00', pady=3)
             self.widgetsInfo[a]['labels'][0].pack(anchor=W)
-            self.widgetsInfo[a]['labels'][1] = Label(currentHotKeyFrame, text=loadedjsonsettings['settings']['hotKeys'][self.widgetsInfo[a]['jsonData']], bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
+            self.widgetsInfo[a]['labels'][1] = Label(currentHotKeyFrame, text= ('+'.join(loadedjsonsettings['settings']['hotKeys'][self.widgetsInfo[a]['jsonData']])), bg = '#2B2D31', fg='#C96C00', relief='ridge', width=25, pady=3)
             self.widgetsInfo[a]['labels'][1].pack(anchor=W)
             self.widgetsInfo[a]['buttons'][0] = self.initSetButton(a, self.widgetsInfo)
             self.widgetsInfo[a]['buttons'][0], self.widgetsInfo = self.widgetsInfo[a]['buttons'][0].create(setChangeButtonFrame, text='Change', changeText='Set')
