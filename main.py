@@ -101,7 +101,9 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
             p.start()
         win32api.Sleep(100)
         print('START')
-        toggleButton.config(text='Stop')
+        newPhoto = PhotoImage(file='./icons/general/stop.png')
+        toggleButton.config(image=newPhoto)
+        toggleButton.image = newPhoto
         toggle.currentStatus = True
     elif toggle.currentStatus == True:
         root.focus_set()
@@ -112,7 +114,9 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
             del(process_list[len(process_list)-1])
         print('STOP')
         initVars(loadedjsonsettings)
-        toggleButton.config(text='Start')
+        newPhoto = PhotoImage(file='./icons/general/play.png')
+        toggleButton.config(image=newPhoto)
+        toggleButton.image = newPhoto
         toggle.currentStatus = False
     else: toggle.currentStatus = False
     win32api.Sleep(1000)
@@ -206,34 +210,39 @@ if __name__ == '__main__':
     root.config(bg = '#0F151D')
     root.resizable(0,0)
     root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='./favicon.png'))
-    #Frame for the cps slider and button to change it's limits
-    cpsframe = Frame(root, bg = '#0F151D')
-    cpsframe.pack(side = TOP)
-    #yes lets put the start and stop stuff in a frame titled other stuff
-    otherstuffframe = Frame(root, bg = '#0F151D')
-    otherstuffframe.pack(side = TOP)
-    #The frame the button and keyboard button selection stuff goes in.
-    cbbuttonframe = Frame(root, bg = '#0F151D')
-    cbbuttonframe.pack(side = TOP)
-    #Start and Stop Hotkey frames
-    cpsvalue = IntVar()
-    cpsvaluelabel = Label(cpsframe, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
-    cpsvaluelabel.pack(side = TOP)
-    cpsSlider = Scale(cpsframe, orient = HORIZONTAL, from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
-    cpsSlider.pack(side = LEFT)
-    cpsSliderTTP = toolTip.CreateToolTip(cpsSlider, 'Change the timeout between clicks (1 is fastest)')
+    #high quality 10/10 button shit for the modern skid
+    buttonFrame = Frame(root, bg = '#0F151D')
+    buttonFrame.pack(side=LEFT)
     #Start/Stop button
-    toggleButton = Button(otherstuffframe, text = 'Start', command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=70)
-    toggleButton.pack(anchor=W)
+    toggleButtonImage = PhotoImage(file='./icons/general/play.png')
+    toggleButton = Button(buttonFrame, command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), image=toggleButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+    toggleButton.image = toggleButtonImage
+    toggleButton.pack(anchor=E)
     toggleButtonTTP = toolTip.CreateToolTip(toggleButton, 'Start/Stop the clicking with a button')
+    #Settings button stuff
+    settingsButtonPhoto = PhotoImage(file='./icons/general/settings.png')
+    settingsButton = Button(buttonFrame, command=settings, image=settingsButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+    settingsButton.image = settingsButtonPhoto
+    settingsButton.pack(anchor=E)
+
+    # Frames for not buttons
+    otherStuffFrame = Frame(root, bg = '#0F151D')
+    otherStuffFrame.pack(side=LEFT)
+    cpsFrame = Frame(otherStuffFrame, bg = '#0F151D')
+    cpsFrame.pack(side = TOP)
+    operationsFrame = Frame(otherStuffFrame, bg = '#0F151D')
+    operationsFrame.pack(side=TOP)
+    #Stuff that goes in frames
+    cpsvalue = IntVar()
+    cpsvaluelabel = Label(cpsFrame, text = 'CPS value', bg = '#0F151D', fg = '#C96C00')
+    cpsvaluelabel.pack(side = TOP)
+    cpsSlider = Scale(cpsFrame, orient = HORIZONTAL, from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]), resolution = 1, length = 500, variable = cpsvalue, troughcolor = '#2B2D31', bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#0F151D', activebackground = '#0F151D')
+    cpsSlider.pack(anchor=W)
+    cpsSliderTTP = toolTip.CreateToolTip(cpsSlider, 'Change the timeout between clicks (1 is fastest)')
     #thing for containing all the hotkey buttons and other neat stuff for keyboard
-    #The overarchinge frame
-    mouseandkeyboardsettingframe = Frame(cbbuttonframe, bg = '#0F151D')
-    mouseandkeyboardsettingframe.pack(side = LEFT)
-    #The 2 frames for the settings and selecting mouse or keyboard
-    selectkeyboardormouseframe = Frame(mouseandkeyboardsettingframe, bg = '#0F151D')
+    selectkeyboardormouseframe = Frame(operationsFrame, bg = '#0F151D')
     selectkeyboardormouseframe.pack(side = LEFT)
-    mandksettingsframe = Frame(mouseandkeyboardsettingframe, bg = '#0F151D')
+    mandksettingsframe = Frame(operationsFrame, bg = '#0F151D')
     mandksettingsframe.pack(side = LEFT)
     #The 2 frames for the mouse and keyboard settings
     mousesettingstuff = Frame(mandksettingsframe, bg = '#0F151D')
@@ -254,8 +263,6 @@ if __name__ == '__main__':
     buttoncheckboxframe.pack(side = LEFT)
     buttonhotkeylabel = Frame(mousesettingstuff, bg = '#0F151D')
     buttonhotkeylabel.pack(side = LEFT)
-    buttonhotkeyframe = Frame(mousesettingstuff, bg = '#0F151D')
-    buttonhotkeyframe.pack(side = LEFT)
     #Mouse button stuff
     lcblabel = Label(buttonlabelframe, text = 'LCB Button  ', bg = '#0F151D', fg = '#C96C00')
     lcblabel.pack(anchor = W)
@@ -279,11 +286,6 @@ if __name__ == '__main__':
     keyboardlabel.pack(side = LEFT)
     keyboardentry = Entry(keyboardstuff, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
     keyboardentry.pack(side = LEFT)
-    #Settings button stuff
-    settingsFrame = Frame(root, bg = '#0F151D')
-    settingsFrame.pack(side=TOP)
-    settingsButton = Button(settingsFrame, text='Settings', command=settings, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F', width=70)
-    settingsButton.pack(side=RIGHT)
     #startup function
     changeclickmode()
     initVars(loadedjsonsettings)
