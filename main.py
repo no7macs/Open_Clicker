@@ -224,6 +224,7 @@ if __name__ == '__main__':
     settingsButton = Button(buttonFrame, command=settings, image=settingsButtonPhoto, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     settingsButton.image = settingsButtonPhoto
     settingsButton.pack(anchor=E)
+    settingsButtonTTP = toolTip.CreateToolTip(settingsButton, 'Opens settings')
 
     # Frames for not buttons
     otherStuffFrame = Frame(root, bg = '#0F151D')

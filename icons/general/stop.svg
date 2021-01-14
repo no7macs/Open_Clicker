@@ -7,38 +7,38 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:export-ydpi="96"
-   inkscape:export-xdpi="96"
-   inkscape:export-filename="A:\Pictures\InkScape\Open_Clciker-Icons\icons\general\stop.png"
-   width="50"
-   height="50"
-   viewBox="0 0 13.229166 13.229167"
-   version="1.1"
-   id="svg8"
+   sodipodi:docname="stop.svg"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="stop.svg">
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 13.229166 13.229167"
+   height="50"
+   width="50"
+   inkscape:export-filename="A:\Pictures\InkScape\Open_Clciker-Icons\icons\general\stop.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <defs
      id="defs2" />
   <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="11.2"
-     inkscape:cx="27.955892"
-     inkscape:cy="20.828502"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="-8"
+     inkscape:window-maximized="1"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-x="-8"
+     inkscape:window-height="1017"
+     inkscape:window-width="1920"
+     units="px"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     inkscape:cy="20.828502"
+     inkscape:cx="27.955892"
+     inkscape:zoom="11.2"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -52,15 +52,36 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
+     id="layer1"
      inkscape:groupmode="layer"
-     id="layer1">
-    <rect
-       y="1.1562288"
-       x="1.1562288"
-       height="10.916709"
-       width="10.916709"
-       id="rect831"
-       style="fill:#066d9f;stroke-width:0.842092" />
+     inkscape:label="Layer 1">
+    <text
+       id="text833"
+       y="-2.4804688"
+       x="-2.4332216"
+       style="font-size:1.41111px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         style="font-size:1.41111px;stroke-width:0.264583"
+         y="-2.4804688"
+         x="-2.4332216"
+         id="tspan831"
+         sodipodi:role="line">no7mac 2021</tspan></text>
+    <g
+       id="g843">
+      <rect
+         style="fill:#066d9f;stroke-width:0.483134"
+         id="rect837"
+         width="3.5934205"
+         height="10.916709"
+         x="1.1562288"
+         y="1.1562288" />
+      <rect
+         y="1.1562288"
+         x="8.479517"
+         height="10.916709"
+         width="3.5934205"
+         id="rect839"
+         style="fill:#066d9f;stroke-width:0.483134" />
+    </g>
   </g>
 </svg>
