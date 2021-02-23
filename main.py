@@ -96,6 +96,7 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
         if not len(process_list) >= 1:
             process_list.append(str(random.randint(0,999)))
             p = kthread.KThread(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
+            p.daemon = True
             process_list[len(process_list)-1] = p
             print(p)
             p.start()
