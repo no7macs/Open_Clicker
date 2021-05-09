@@ -30,25 +30,25 @@ VK_CODE = {'backspace':0x08, 'tab':0x09, 'clear':0x0C, 'enter':0x0D, 'alt':0x12,
     'crsel_key':0xF7, 'exsel_key':0xF8, 'play_key':0xFA, 'zoom_key':0xFB, 'clear_key':0xFE, '+':0xBB, ',':0xBC, '-':0xBD, '.':0xBE, '/':0xBF, '`':0xC0,
     ';':0xBA, '[':0xDB, '\\':0xDC, ']':0xDD, "'":0xDE,'xbutton1':0x05,'xbutton2':0x06}
 #Runs in seperate process
-def running(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
+def running(lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
     actionSet = {'before':[],'after':[]}
     x = int()
     y = int()
-    if morkcheckbuttonvar == 1:
-        if lcbbuttonvar == 1:
-            actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)', '<string>', 'exec'))
-            actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)', '<string>', 'exec'))
-        if mcbbuttonvar == 1:
-            actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)', '<string>', 'exec'))
-            actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)', '<string>', 'exec'))
-        if rcbbuttonvar == 1:
-            actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)', '<string>', 'exec'))
-            actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)', '<string>', 'exec'))
-    if morkcheckbuttonvar == 0:
-        for a in (keyboardentry.split('+')):
+    if lcbbuttonvar == 1:
+        actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x,y,0,0)', '<string>', 'exec'))
+        actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x,y,0,0)', '<string>', 'exec'))
+    if mcbbuttonvar == 1:
+        actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN,x,y,0,0)', '<string>', 'exec'))
+        actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP,x,y,0,0)', '<string>', 'exec'))
+    if rcbbuttonvar == 1:
+        actionSet['before'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN,x,y,0,0)', '<string>', 'exec'))
+        actionSet['after'].append(compile('win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP,x,y,0,0)', '<string>', 'exec'))
+    for a in (keyboardentry.split('+')):
+        if a in VK_CODE:
             print(VK_CODE[a])
             actionSet['before'].append(compile('win32api.keybd_event(' + str(VK_CODE[a]) + ', 0,0,0)', '<string>', 'exec'))
             actionSet['after'].append(compile('win32api.keybd_event(' + str(VK_CODE[a]) + ', 0,win32con.KEYEVENTF_KEYUP, 0)', '<string>', 'exec'))
+    
     if loadedjsonsettings['saveState']['timeoutTypes'] == 1:
         actionSet['before'].append(compile('win32api.Sleep(int(cpsvalue))', '<string>', 'exec'))
     else:
@@ -82,12 +82,12 @@ def main(loadedjsonsettings):
         detect(call=lambda:togglercb(),
                 keys=loadedjsonsettings['settings']['hotKeys']['rcbHotKey'])
     if loadedjsonsettings['settings']['hotKeys']['toggleHotKey'] != '':
-        detect(call=lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings),
+        detect(call=lambda:toggle(lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings),
                 keys=loadedjsonsettings['settings']['hotKeys']['toggleHotKey'])
 
     root.after(1, lambda: main(loadedjsonsettings))
 
-def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
+def toggle(lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings):
     save(loadedjsonsettings)
     try: toggle.currentStatus
     except: toggle.currentStatus = bool()
@@ -95,7 +95,7 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
         root.focus_set()
         if not len(process_list) >= 1:
             process_list.append(str(random.randint(0,999)))
-            p = kthread.KThread(target=running, args = (morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
+            p = kthread.KThread(target=running, args = (lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboardentry, cpsvalue, loadedjsonsettings), name=process_list[len(process_list)-1])
             p.daemon = True
             process_list[len(process_list)-1] = p
             print(p)
@@ -125,7 +125,6 @@ def toggle(morkcheckbuttonvar, lcbbuttonvar, mcbbuttonvar, rcbbuttonvar, keyboar
 def save(loadedjsonsettings):
     with open('./json_settings.json','w') as settingsfile:
         #Will be changed when setings is expanded
-        loadedjsonsettings["saveState"]["mouseorkeyboard"] = morkcheckbuttonvar.get()
         loadedjsonsettings["saveState"]["lcbenabled"] = lcbbuttonvar.get()
         loadedjsonsettings["saveState"]["mcbenabled"] = mcbbuttonvar.get()
         loadedjsonsettings["saveState"]["rcbenabled"] = rcbbuttonvar.get()
@@ -153,9 +152,6 @@ def initVars(loadedjsonsettings):
     cpsSlider.config(from_ = int(loadedjsonsettings["settings"]['general']["mincpsval"]), to = int(loadedjsonsettings["settings"]['general']["maxcpsval"]))
     cpsSlider.set(int(loadedjsonsettings["saveState"]["cpspreviousval"]))
     
-    morkcheckbuttonvar.set(loadedjsonsettings["saveState"]["mouseorkeyboard"])
-    changeclickmode()
-
     lcbbuttonvar.set(loadedjsonsettings["saveState"]["lcbenabled"])
     mcbbuttonvar.set(loadedjsonsettings["saveState"]["mcbenabled"])
     rcbbuttonvar.set(loadedjsonsettings["saveState"]["rcbenabled"])
@@ -174,28 +170,6 @@ def togglemcb():
 def togglercb(): 
     rcbcheckbox.toggle()
     win32api.Sleep(200)
-
-def changeclickmode():
-    if morkcheckbuttonvar.get() == 0:
-        lcblabel.config(state='disabled')
-        mcblabel.config(state='disabled')
-        rcblabel.config(state='disabled')
-        lcbcheckbox.config(state='disabled')
-        mcbcheckbox.config(state='disabled')
-        rcbcheckbox.config(state='disabled')
-        keyboardlabel.config(state='normal')
-        keyboardentry.config(state='normal')
-    elif morkcheckbuttonvar.get() == 1:
-        lcblabel.config(state='normal')
-        mcblabel.config(state='normal')
-        rcblabel.config(state='normal')
-        lcbcheckbox.config(state='normal')
-        mcbcheckbox.config(state='normal')
-        rcbcheckbox.config(state='normal')
-        keyboardlabel.config(state='disabled')
-        keyboardentry.config(state='disabled')
-    else: print('YOU FUCKED IT UP YOU DUMBASS')
-    return
 
 if __name__ == '__main__':
     multiprocessing.freeze_support()
@@ -216,7 +190,7 @@ if __name__ == '__main__':
     buttonFrame.pack(side=LEFT)
     #Start/Stop button
     toggleButtonImage = PhotoImage(file='./icons/general/play.png')
-    toggleButton = Button(buttonFrame, command = lambda:toggle(morkcheckbuttonvar.get(), lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), image=toggleButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
+    toggleButton = Button(buttonFrame, command = lambda:toggle(lcbbuttonvar.get(), mcbbuttonvar.get(), rcbbuttonvar.get(), keyboardentry.get(), cpsvalue.get(), loadedjsonsettings), image=toggleButtonImage, bg = '#2B2D31', fg='#C96C00', activebackground='#1E1B15', activeforeground='#066D9F')
     toggleButton.image = toggleButtonImage
     toggleButton.pack(anchor=E)
     toggleButtonTTP = toolTip.CreateToolTip(toggleButton, 'Start/Stop the clicking with a button')
@@ -242,8 +216,6 @@ if __name__ == '__main__':
     cpsSlider.pack(anchor=W)
     cpsSliderTTP = toolTip.CreateToolTip(cpsSlider, 'Change the timeout between clicks (1 is fastest)')
     #thing for containing all the hotkey buttons and other neat stuff for keyboard
-    selectkeyboardormouseframe = Frame(operationsFrame, bg = '#0F151D')
-    selectkeyboardormouseframe.pack(side = LEFT)
     mandksettingsframe = Frame(operationsFrame, bg = '#0F151D')
     mandksettingsframe.pack(side = LEFT)
     #The 2 frames for the mouse and keyboard settings
@@ -251,12 +223,6 @@ if __name__ == '__main__':
     mousesettingstuff.pack(anchor = W)
     keyboardstuff = Frame(mandksettingsframe, bg = '#0F151D')
     keyboardstuff.pack(anchor = W)
-    #The things for changing between mouse and keyboard
-    morkcheckbuttonvar = IntVar()
-    mousecheckbutton = Checkbutton(selectkeyboardormouseframe, pady = 15,text = 'mouse', variable = morkcheckbuttonvar, onvalue = 1, offvalue = 0, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F', command = lambda: changeclickmode())
-    mousecheckbutton.pack(anchor = W)
-    keyboardcheckbutton = Checkbutton(selectkeyboardormouseframe, pady = 15, text = 'keyboard', variable = morkcheckbuttonvar, onvalue = 0, offvalue = 1, bg = '#0F151D', fg = '#C96C00', highlightbackground = '#0F151D', highlightcolor = '#1E1D1D', selectcolor = '#0F151D', activebackground = '#0F151D', activeforeground = '#066D9F', command = lambda: changeclickmode())
-    keyboardcheckbutton.pack(anchor = W)
     #mouse button stuff
     #mouse button setting frames
     buttonlabelframe = Frame(mousesettingstuff, bg = '#0F151D')
@@ -288,8 +254,6 @@ if __name__ == '__main__':
     keyboardlabel.pack(side = LEFT)
     keyboardentry = Entry(keyboardstuff, bg = '#2B2D31', fg='#C96C00', insertbackground = '#C96C00')
     keyboardentry.pack(side = LEFT)
-    #startup function
-    changeclickmode()
     initVars(loadedjsonsettings)
     #run on startup
     key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)

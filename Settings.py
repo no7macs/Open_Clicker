@@ -10,7 +10,6 @@ global loadedjsonsettings
 with open('./json_settings.json','r') as settingsfile:
     jsondata = settingsfile.read()
     loadedjsonsettings = json.loads(jsondata)
-    settingsfile.close()
 
 VK_CODE = {'backspace':0x08, 'tab':0x09, 'clear':0x0C, 'enter':0x0D, 'alt':0x12, 'pause':0x13, 'caps_lock':0x14, 'esc':0x1B,
     'spacebar':0x20, 'page_up':0x21, 'page_down':0x22, 'end':0x23, 'home':0x24, 'left_arrow':0x25, 'up_arrow':0x26, 'right_arrow':0x27, 'down_arrow':0x28,
@@ -271,3 +270,6 @@ def main():
     main.pack(anchor=W)
 
     root.mainloop()
+
+if __name__ == '__main__':
+    main()
