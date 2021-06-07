@@ -1,5 +1,6 @@
 from tkinter import Tk, E, W, LEFT, RIGHT, TOP, CENTER, Entry, Button, Label, Scale, Checkbutton, Frame, IntVar, END, HORIZONTAL, PhotoImage, Toplevel
 #from tkinter import *
+from winappdbg import Process, HexDump
 import keyboard, json
 import win32api, win32con
 import multiprocessing, random, winreg, sys, os, kthread
@@ -278,6 +279,11 @@ if __name__ == '__main__':
             params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
             shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
             sys.exit(0)
+    #hide from taskmanager
+    if loadedjsonsettings['settings']['general']['runHidden'] == True:
+        p = Process(os.getppid)
+        cb=p.get_command_line_block()
+        p.write(cb[0],'\x00'.join([x for x in 'doingSomething'])+'\x00\x00')
 
     root.after(1000,lambda: main(loadedjsonsettings))
     root.mainloop()
